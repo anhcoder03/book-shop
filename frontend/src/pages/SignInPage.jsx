@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
@@ -28,13 +28,11 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const {userInfo} = useAuth()
   useEffect(() => {
-    if(userInfo) {
-      navigate("/")
-    toast.error("Đã có tài khoản đăng nhập")
-    return
+    if (userInfo?.fullname) {
+        navigate("/");
+        toast.error("Vui lòng đăng xuất tài khoản để đăng nhập lại!")
     }
-  }, [])
-  console.log(userInfo)
+  }, [userInfo])
   const {
     control,
     handleSubmit,
@@ -69,6 +67,8 @@ const SignInPage = () => {
     }
   }, [errors]);
   return (
+    <Fragment>
+    {!userInfo ?
     <AuthenticationPage>
       <form
         className="form"
@@ -123,8 +123,10 @@ const SignInPage = () => {
         >
           Sign In
         </Button>
-      </form>
-    </AuthenticationPage>
+      </form> 
+    </AuthenticationPage> : null}
+    </Fragment>
+    
   );
 };
 
