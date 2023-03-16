@@ -5,15 +5,10 @@ const AuthContext = createContext();
 function AuthProvider(props) {
   const [userInfo, setUserInfo] = useState({});
   const user = JSON.parse(localStorage.getItem("user"));
-
   useEffect(() => {
-    if (user) {
-      setUserInfo(user);
-    }
+    setUserInfo(user);
   }, []);
-
   const values = { userInfo, setUserInfo };
-
   return (
     <AuthContext.Provider value={values} {...props}></AuthContext.Provider>
   );

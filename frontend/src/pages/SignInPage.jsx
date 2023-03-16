@@ -15,7 +15,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { useAuth } from "../contexts/auth-context";
 
 const schema = yup.object({
-  username: yup.string().required("Please enter your email"),
+  username: yup.string().required("Please enter your username"),
   password: yup
     .string()
     .min(8, "Your password must be at least 8 characters or greater")
@@ -68,7 +68,7 @@ const SignInPage = () => {
   }, [errors]);
   return (
     <Fragment>
-      {userInfo ? (
+      {!userInfo ? (
         <AuthenticationPage>
           <form
             className="form"

@@ -68,8 +68,8 @@ class UserController {
       });
   }
   getUser(req, res, next) {
-    const { username } = req.body;
-    User.findOne({ username: username })
+    const id = req.params.id;
+    User.findOne({ _id: id })
       .then((data) => {
         res.json(data);
       })
@@ -80,12 +80,30 @@ class UserController {
 
   updateUser(req, res, next) {
     const id = req.params.id;
-    User.updateOne({ _id: id }, req.body)
-      .then(() => {
-        res.json("success");
+    const formData = req.body;
+    User.findOne({ _id: id })
+      .then((data) => {
+        return bcrypt.hash(formData.password, 12);
+      })
+      .then((hashedPassword) => {
+        const user = {
+          fullname: formData.fullname,
+          username: formData.username,
+          password: hashedPassword,
+          avatar: formData.avatar,
+        };
+        User.updateOne({ _id: id }, user)
+          .then(() =>
+            res.status(201).json({
+              message: "Cập nhật thành công!",
+            })
+          )
+          .catch((err) => {
+            res.status(400).json(err);
+          });
       })
       .catch((err) => {
-        console.log(err);
+        res.status(400).json(`Lỗi: ${err}`);
       });
   }
   deleteUser(req, res, next) {

@@ -34,7 +34,7 @@ const InputStyles = styled.div`
   }
 `;
 
-function Input({ name = "", type = "text", children, control, ...props }) {
+function Input({ name, type = "text", children, control, ...props }) {
   const { field } = useController({
     control,
     name,

@@ -1,6 +1,8 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+import { useAuth } from "../../contexts/auth-context";
 import DashboardHeader from "./DashboardHeader";
 import Sidebar from "./Sidebar";
 const DashboardStyles = styled.div`
@@ -16,6 +18,19 @@ const DashboardStyles = styled.div`
   }
 `;
 const DashboardLayout = ({ children }) => {
+  const navigate = useNavigate();
+  const { userInfo } = useAuth();
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/");
+      toast.warning("Vui lòng đăng nhập để sử dụng tính năng này!");
+    }
+    if (userInfo?.role === "User") {
+      toast.error("Không đủ quyền!");
+      navigate("/");
+    }
+    console.log(userInfo?.role);
+  }, [userInfo]);
   return (
     <DashboardStyles>
       <DashboardHeader></DashboardHeader>

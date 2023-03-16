@@ -11,6 +11,8 @@ const User = new Schema(
       default:
         "https://images.unsplash.com/photo-1678720131679-14475f693cd6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
     },
+    role: { type: String, default: "User" },
+    status: { type: String, default: "Active" },
   },
   { timestamps: true }
 );

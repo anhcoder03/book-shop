@@ -6,7 +6,7 @@ function router(app) {
   //auth
   app.post("/register", authRouter);
   app.get("/getUsers", authRouter);
-  app.get("/getUser", authRouter);
+  app.get("/getUser/:id", authRouter);
   app.post("/login", authRouter);
   app.put("/updateUser/:id", authRouter);
   app.delete("/deleteUser/:id", authRouter);

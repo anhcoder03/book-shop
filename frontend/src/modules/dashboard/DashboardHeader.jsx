@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "../../components/button";
 const DashboardHeaderStyles = styled.div`
   background-color: white;
   padding: 10px 20px;

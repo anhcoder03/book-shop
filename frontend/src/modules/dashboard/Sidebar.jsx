@@ -28,7 +28,7 @@ const SidebarStyles = styled.div`
     cursor: pointer;
     &.active,
     &:hover {
-      background: #f1fbf7;
+      background: #ff655114;
       color: ${(props) => props.theme.primary};
     }
   }
@@ -37,27 +37,27 @@ const sidebarLinks = [
   {
     title: "Dashboard",
     url: "/dashboard",
-    icon: <i class="fa-solid fa-layer-group"></i>,
+    icon: <i className="fa-solid fa-layer-group"></i>,
   },
   {
     title: "Product",
     url: "/manage/product",
-    icon: <i class="fa-solid fa-folder"></i>,
+    icon: <i className="fa-solid fa-folder"></i>,
   },
   {
     title: "Category",
     url: "/manage/category",
-    icon: <i class="fa-solid fa-list-check"></i>,
+    icon: <i className="fa-solid fa-list-check"></i>,
   },
   {
     title: "User",
     url: "/manage/user",
-    icon: <i class="fa-regular fa-user"></i>,
+    icon: <i className="fa-regular fa-user"></i>,
   },
   {
     title: "Logout",
     url: "/",
-    icon: <i class="fa-solid fa-right-from-bracket"></i>,
+    icon: <i className="fa-solid fa-right-from-bracket"></i>,
     onClick: () => {},
   },
 ];
@@ -65,10 +65,10 @@ const Sidebar = () => {
   return (
     <SidebarStyles className="sidebar">
       <div className="sidebar-logo">
-        <img src="logo.svg" alt="" />
+        <img src="../logo.svg" alt="" />
       </div>
       {sidebarLinks.map((link) => (
-        <NavLink to={link.url} className="menu-item">
+        <NavLink to={link.url} className="menu-item" key={link.title}>
           <span className="menu-icon">{link.icon}</span>
           <span className="menu-text">{link.title}</span>
         </NavLink>

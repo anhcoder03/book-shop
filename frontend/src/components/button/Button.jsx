@@ -38,16 +38,14 @@ const Button = ({
     return (
       <NavLink to={to}>
         <ButtonStyles type={type} {...props}>
-          {" "}
-          {child}{" "}
-        </ButtonStyles>{" "}
+          {child}
+        </ButtonStyles>
       </NavLink>
     );
   }
   return (
     <ButtonStyles type={type} onClick={onClick} {...props}>
-      {" "}
-      {child}{" "}
+      {child}
     </ButtonStyles>
   );
 };
