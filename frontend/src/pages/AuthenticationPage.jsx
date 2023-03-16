@@ -6,14 +6,8 @@ const AuthenticationPageStyles = styled.div`
   min-height: 100vh;
   padding: 40px;
   .logo {
-    margin: 0 auto 20px;
-  }
-  .heading {
-    text-align: center;
-    color: ${(props) => props.theme.primary};
-    font-weight: bold;
-    font-size: 40px;
-    margin-bottom: 60px;
+    width: 250px;
+    margin: 50px auto 70px;
   }
   .form {
     max-width: 600px;
@@ -35,10 +29,10 @@ const AuthenticationPage = ({ children }) => {
     <AuthenticationPageStyles>
       <div className="container">
         <NavLink to={"/"}>
-          <img srcSet="blog-logo.png 2x" className="logo" alt="logo" />
-        </NavLink>{" "}
-        <h1 className="heading"> Monkey Blogging </h1> {children}{" "}
-      </div>{" "}
+          <img src="logo.svg" className="logo" alt="logo" />
+        </NavLink>
+        {children}
+      </div>
     </AuthenticationPageStyles>
   );
 };

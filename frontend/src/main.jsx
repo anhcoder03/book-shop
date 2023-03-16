@@ -12,11 +12,11 @@ import { ToastContainer } from "react-toastify";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <GlobalStyles> </GlobalStyles>{" "}
+      <GlobalStyles></GlobalStyles>
       <BrowserRouter>
         <App />
-        <ToastContainer> </ToastContainer>{" "}
-      </BrowserRouter>{" "}
-    </ThemeProvider>{" "}
+        <ToastContainer></ToastContainer>
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>
 );

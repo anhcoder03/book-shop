@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 class UserController {
   register(req, res, next) {
@@ -8,13 +8,25 @@ class UserController {
       .then((data) => {
         if (data) {
           res.json("Tên đăng nhập đã tồn tại");
-        } else {
-          return User.create(formData);
         }
+        return bcrypt.hash(formData.password, 12);
       })
-      .then((data) => res.json("Tạo tài khoản thành công"))
+      .then((hashedPassword) => {
+        const user = new User({
+          fullname: formData.fullname,
+          username: formData.username,
+          password: hashedPassword,
+        });
+        return user.save();
+      })
+      .then((user) =>
+        res.status(201).json({
+          message: "Tạo tài khoản thành công!",
+          user: user,
+        })
+      )
       .catch((err) => {
-        res.status(500).json("Loi cmnr");
+        res.status(400).json("Loi cmnr");
       });
   }
   login(req, res, next) {
@@ -23,20 +35,27 @@ class UserController {
       return res.status(400).json("Missing username and/or password");
     }
     try {
-      User.findOne({ username: username, password: password }).then((data) => {
-        if (data) {
-          res
-            .status(200)
-            .json({ success: true, message: "Đăng nhập thành công", data });
-        } else {
-          res.status(401).json({
-            success: false,
-            message: "Tài khoản hoặc mật khẩu không đúng",
-          });
+      User.findOne({ username: username }).then((user) => {
+        if (!user) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Username không tồn tại!" });
         }
+        bcrypt.compare(password, user.password).then((isMatch) => {
+          if (!isMatch) {
+            return res
+              .status(400)
+              .json({ success: false, message: "Mật khẩu không đúng!" });
+          }
+          return res.status(200).json({
+            success: true,
+            message: "Đăng nhập thành công!",
+            data: user,
+          });
+        });
       });
     } catch (err) {
-      return res.status(403).json("Lỗi server");
+      return res.status(400).json("Lỗi");
     }
   }
   getUsers(req, res, next) {

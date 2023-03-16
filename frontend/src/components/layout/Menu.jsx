@@ -1,0 +1,72 @@
+import React from "react";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+
+const menuLinks = [
+  {
+    url: "/",
+    title: "Trang chủ",
+  },
+  {
+    url: "/products",
+    title: "Sản Phẩm",
+  },
+  {
+    url: "/vendor",
+    title: "Vendor",
+  },
+  {
+    url: "/news",
+    title: "Tin Tức",
+  },
+  {
+    url: "/contact",
+    title: "Liên Hệ",
+  },
+];
+const MenuStyles = styled.ul`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  .menu-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-left: 40px;
+    list-style: none;
+  }
+  .menu-link {
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .menu-link.active {
+    color: #ff6651;
+    font-weight: 600;
+  }
+  .menu-link:hover {
+    color: #ff6651;
+  }
+`;
+const Menu = () => {
+  return (
+    <MenuStyles>
+      <div className="menu-wrapper">
+        {menuLinks.map((item) => (
+          <li className="menu-item" key={item.title}>
+            <NavLink
+              to={item.url}
+              className={`menu-link ${({ isActive }) =>
+                isActive ? "active" : ""}`}
+            >
+              {item.title}
+            </NavLink>
+          </li>
+        ))}
+      </div>
+    </MenuStyles>
+  );
+};
+
+export default Menu;
