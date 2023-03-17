@@ -65,10 +65,11 @@ class ProductController {
 
         return product.save();
       })
-      .then(() => {
+      .then((data) => {
         res.status(200).json({
           success: true,
           message: "Cập nhật danh mục thành công!",
+          data: data,
         });
       })
       .catch((err) => {
@@ -95,7 +96,27 @@ class ProductController {
         });
       });
   }
-
+  getProductByCategory(req, res, next) {
+    const category = req.params.category;
+    Product.find({ category: category })
+      .then((data) => {
+        if (!data) {
+          res.status(404).json({
+            message: "Không tìm thấy sản phẩm",
+          });
+        } else {
+          res.status(200).json({
+            message: "Tìm thấy sản phẩm",
+            data: data,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(400).json({
+          message: "Lỗi",
+        });
+      });
+  }
   // getCateAll(req, res, next) {
   //   Category.find({})
   //     .then((data) => {
@@ -112,26 +133,28 @@ class ProductController {
   //       });
   //     });
   // }
-  // getCateById(req, res, next) {
-  //   const id = req.params.id;
-  //   Category.findById(id)
-  //     .then((data) => {
-  //       res.status(200).json({
-  //         success: true,
-  //         message: "Thành công",
-  //         data: data,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       res.status(400).json({
-  //         success: false,
-  //         message: `Lỗi : ${err}`,
-  //       });
-  //     });
-  // }
+  getProduct(req, res, next) {
+    const id = req.params.id;
+    Product.findById(id)
+      .then((data) => {
+        res.status(200).json({
+          success: true,
+          message: "Thành công",
+          data: data,
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          success: false,
+          message: `Lỗi : ${err}`,
+        });
+      });
+  }
 
   getProductAll(req, res, next) {
+    const litmit = req.query.limit ? parseInt(req.query.limit) : 15;
     Product.find()
+      .limit(litmit)
       .then((data) => {
         res.status(200).json({
           success: true,

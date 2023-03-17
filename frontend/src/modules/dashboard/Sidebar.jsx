@@ -6,17 +6,6 @@ const SidebarStyles = styled.div`
   background: #ffffff;
   box-shadow: 10px 10px 20px rgba(218, 213, 213, 0.15);
   border-radius: 12px;
-  .sidebar-logo {
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-    gap: 0 20px;
-    img {
-      max-width: 200px;
-    }
-    margin-bottom: 40px;
-    padding: 20px 20px 0;
-  }
   .menu-item {
     display: flex;
     align-items: center;

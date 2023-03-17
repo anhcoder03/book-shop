@@ -23,8 +23,10 @@ function router(app) {
 
   app.post("/create_product", productRouter);
   app.get("/getProductAll", productRouter);
+  app.get("/getProduct/:id", productRouter);
   app.put("/update_product/:id", productRouter);
   app.delete("/delete_product/:id", productRouter);
+  app.get("/product_of_category/:category", productRouter);
 }
 
 module.exports = router;

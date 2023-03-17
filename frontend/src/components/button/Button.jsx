@@ -50,7 +50,7 @@ const Button = ({
   );
 };
 Button.propTypes = {
-  type: PropTypes.oneOf(["button", "submit"]).isRequired,
+  type: PropTypes.oneOf(["submit", "buton"]),
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
   children: PropTypes.node,

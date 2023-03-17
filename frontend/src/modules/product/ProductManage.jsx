@@ -7,28 +7,15 @@ import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
 import { Button } from "../../components/button";
+import GetData from "../../components/common/GetData";
 
-const ProductManage = () => {
-  const [listProduct, setListProduct] = useState([]);
+const ProductManage = ({ data }) => {
+  const listProduct = data.products;
+  console.log(listProduct);
   const navigate = useNavigate();
-  const handleGetProducts = async () => {
-    try {
-      const data = await axiosClient.request({
-        method: "get",
-        url: "/getProductAll",
-      });
-      setListProduct(data.products);
-    } catch (error) {
-      toast.error("Sever error");
-    }
-  };
-
-  useEffect(() => {
-    handleGetProducts();
-  }, []);
-  const handleDeleteUser = (id) => {
+  const handleDeleteProduct = (id) => {
     Swal.fire({
-      title: "Bạn muốn sản phẩm dùng này?",
+      title: "Bạn muốn sản phẩm này?",
       text: "Thao tác này sẽ khiến sản phẩm bị xoá vĩnh viễn!",
       icon: "warning",
       showCancelButton: true,
@@ -92,11 +79,11 @@ const ProductManage = () => {
                   <div className="flex items-center gap-x-3 text-gray-500">
                     <ActionEdit
                       onClick={() =>
-                        navigate(`/manage/update_user/${item._id}`)
+                        navigate(`/manage/update_product/${item._id}`)
                       }
                     ></ActionEdit>
                     <ActionDelete
-                      onClick={() => handleDeleteUser(item._id)}
+                      onClick={() => handleDeleteProduct(item._id)}
                     ></ActionDelete>
                   </div>
                 </td>
@@ -108,4 +95,4 @@ const ProductManage = () => {
   );
 };
 
-export default ProductManage;
+export default GetData(ProductManage, "/getProductAll");

@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import useClickOutSide from "../../hooks/useClickOutSide";
-import { Button } from "../button";
 
 const HeaderStyles = styled.header`
   padding: 20px 0;

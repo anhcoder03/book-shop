@@ -4,11 +4,14 @@ import AddCategory from "./modules/category/AddCategory";
 import CategoryManage from "./modules/category/CategoryManage";
 import UpdateCategory from "./modules/category/UpdateCategory";
 import DashboardLayout from "./modules/dashboard/DashboardLayout";
+import AddProduct from "./modules/product/AddProduct";
 import ProductManage from "./modules/product/ProductManage";
+import UpdateProduct from "./modules/product/UpdateProduct";
 import UpdateUserManage from "./modules/user/UpdateUserManage";
 import UserManage from "./modules/user/UserManage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import HomePage from "./pages/HomePage";
+import PageNotFound from "./pages/PageNotFound";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 
@@ -19,6 +22,7 @@ function App() {
         <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route path="sign-up" element={<SignUpPage></SignUpPage>}></Route>
         <Route path="sign-in" element={<SignInPage></SignInPage>}></Route>
+        <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
         <Route element={<DashboardLayout></DashboardLayout>}>
           <Route
             path="/dashboard"
@@ -60,6 +64,18 @@ function App() {
           <Route
             path="/manage/product"
             element={<ProductManage></ProductManage>}
+          ></Route>
+        </Route>
+        <Route element={<DashboardLayout></DashboardLayout>}>
+          <Route
+            path="/manage/create_product"
+            element={<AddProduct></AddProduct>}
+          ></Route>
+        </Route>
+        <Route element={<DashboardLayout></DashboardLayout>}>
+          <Route
+            path="/manage/update_product/:id"
+            element={<UpdateProduct></UpdateProduct>}
           ></Route>
         </Route>
       </Routes>

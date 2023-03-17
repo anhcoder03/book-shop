@@ -36,10 +36,10 @@ const schema = yup.object({
     .oneOf(["sach-thieu-nhi", "sach-tieng-anh", "sach-van-hoc"]),
 });
 
-const AddProduct = () => {
+const UpdateProduct = () => {
+  let { id } = useParams();
   const navigate = useNavigate();
   const [listCategory, setListCategory] = useState([]);
-
   const {
     control,
     reset,
@@ -50,6 +50,16 @@ const AddProduct = () => {
     mode: "onChange",
     resolver: yupResolver(schema),
   });
+  useEffect(() => {
+    const handleGetUser = async () => {
+      const data = await axiosClient.request({
+        method: "get",
+        url: `getProduct/${id}`,
+      });
+      reset(data.data);
+    };
+    handleGetUser();
+  }, [id]);
 
   const getCategories = async () => {
     try {
@@ -67,17 +77,18 @@ const AddProduct = () => {
     getCategories();
   }, []);
 
-  const handleCreateProduct = async (values) => {
+  const handleUpdateProduct = async (values) => {
     if (!isValid) return;
     try {
       await axiosClient
         .request({
-          method: "post",
-          url: `/create_product`,
+          method: "put",
+          url: `/update_product/${id}`,
           data: values,
         })
         .then((data) => {
-          toast.success("Thêm sản phẩm thành công");
+          console.log(data);
+          toast.success("Cập nhật danh mục thành công");
           navigate("/manage/product");
         });
     } catch (error) {
@@ -94,10 +105,10 @@ const AddProduct = () => {
   }, [errors]);
   return (
     <div>
-      <DashboardHeading title="Update User"></DashboardHeading>
+      <DashboardHeading title="Cập nhật sản phẩm"></DashboardHeading>
       <FormUpdateStyles
         className="form"
-        onSubmit={handleSubmit(handleCreateProduct)}
+        onSubmit={handleSubmit(handleUpdateProduct)}
       >
         <Field>
           <Label htmlFor="title">Title</Label>
@@ -164,11 +175,11 @@ const AddProduct = () => {
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
-          Thêm sản phẩm
+          Cập nhật sản phẩm
         </Button>
       </FormUpdateStyles>
     </div>
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

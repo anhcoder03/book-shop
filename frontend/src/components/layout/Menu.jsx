@@ -12,8 +12,8 @@ const menuLinks = [
     title: "Sản Phẩm",
   },
   {
-    url: "/vendor",
-    title: "Vendor",
+    url: "/theloai",
+    title: "Thể loại",
   },
   {
     url: "/news",
