@@ -22,6 +22,9 @@ function router(app) {
   //product
 
   app.post("/create_product", productRouter);
+  app.get("/getProductAll", productRouter);
+  app.put("/update_product/:id", productRouter);
+  app.delete("/delete_product/:id", productRouter);
 }
 
 module.exports = router;

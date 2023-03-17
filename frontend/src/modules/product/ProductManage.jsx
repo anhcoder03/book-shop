@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import styled from "styled-components";
 import axiosClient from "../../axios/configAxios";
 import { Table } from "../../components/table";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
+import { Button } from "../../components/button";
 
-const UserManage = () => {
-  const [listUser, setListUser] = useState([]);
+const ProductManage = () => {
+  const [listProduct, setListProduct] = useState([]);
   const navigate = useNavigate();
-  const handleGetUsers = async () => {
+  const handleGetProducts = async () => {
     try {
       const data = await axiosClient.request({
         method: "get",
-        url: "/getUsers",
+        url: "/getProductAll",
       });
-
-      setListUser(data);
+      setListProduct(data.products);
     } catch (error) {
       toast.error("Sever error");
     }
   };
 
   useEffect(() => {
-    handleGetUsers();
+    handleGetProducts();
   }, []);
   const handleDeleteUser = (id) => {
     Swal.fire({
-      title: "Bạn muốn xoá người dùng này?",
-      text: "Thao tác này sẽ khiến người dùng bị xoá vĩnh viễn!",
+      title: "Bạn muốn sản phẩm dùng này?",
+      text: "Thao tác này sẽ khiến sản phẩm bị xoá vĩnh viễn!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -41,9 +40,9 @@ const UserManage = () => {
         try {
           axiosClient.request({
             method: "delete",
-            url: `/deleteUser/${id}`,
+            url: `/delete_product/${id}`,
           });
-          handleGetUsers();
+          handleGetProducts();
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
         } catch (err) {
           toast.error("Đã xẩy ra lỗi");
@@ -53,49 +52,42 @@ const UserManage = () => {
   };
   return (
     <div>
-      <DashboardHeading title="Quản lý người dùng">
-        <div className="mb-10 flex justify-end">
-          <div className="w-full max-w-[300px]">
-            <input
-              type="text"
-              className="w-full p-4 rounded-lg border border-solid border-gray-300"
-              placeholder="Search user..."
-            />
-          </div>
-        </div>
+      <DashboardHeading title="Quản lý sản phẩm">
+        <Button
+          height={"50px"}
+          onClick={() => navigate("/manage/create_product")}
+        >
+          <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+        </Button>
       </DashboardHeading>
       <Table>
         <thead>
           <tr>
             <th>STT</th>
-            <th>Fullname</th>
-            <th>Username</th>
-            <th>Avatar</th>
-            <th>Role</th>
-            <th>Status</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Description</th>
+            <th>Year</th>
+            <th>Price</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {listUser.length > 0 &&
-            listUser.map((item, index) => (
+          {listProduct.length > 0 &&
+            listProduct.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
-                <td>{item.fullname}</td>
-                <td>
-                  <span className="text-gray-500">{item.username}</span>
+                <td className="truncate max-w-[200px]">{item.title}</td>
+                <td className="max-w-[200px]">
+                  <span className="text-gray-500 truncate">{item.author}</span>
                 </td>
-                <td>
+                <td className="max-w-[250px]">
                   <div className="flex items-center gap-x-3">
-                    <img
-                      src={item.avatar}
-                      alt=""
-                      className="w-[66px] h-[55px] rounded object-cover"
-                    />
+                    <p className="text-gray-500 truncate">{item.desc}</p>
                   </div>
                 </td>
-                <td>{item.role}</td>
-                <td>{item.status}</td>
+                <td>{item.year}</td>
+                <td>{item.price}</td>
                 <td>
                   <div className="flex items-center gap-x-3 text-gray-500">
                     <ActionEdit
@@ -116,4 +108,4 @@ const UserManage = () => {
   );
 };
 
-export default UserManage;
+export default ProductManage;

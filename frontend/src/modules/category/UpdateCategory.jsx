@@ -12,33 +12,17 @@ import { Button } from "../../components/button";
 import { toast } from "react-toastify";
 import DashboardHeading from "../../drafts/DashboardHeading";
 
-const HeaderUserManageStyles = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  .dashboard-heading {
-    font-weight: 600;
-    font-size: 28px;
-  }
-`;
 const FormUpdateStyles = styled.form`
   width: 100%;
   max-width: 600px;
   margin: 50px auto;
 `;
 const schema = yup.object({
-  fullname: yup.string().required("Please enter your fullname"),
-  username: yup.string().required("Please enter your username"),
-  password: yup
-    .string()
-    .min(8, "Your password must be at least 8 characters or greater")
-    .required("Please enter your password"),
-  avatar: yup.string().required("Please enter your avatar"),
+  categoryName: yup.string().required("Vui lòng nhập tên danh mục!"),
 });
 
-const UpdateUserManage = () => {
+const UpdateCategory = () => {
   let { id } = useParams();
-  const [user, setUser] = useState([]);
   const navigate = useNavigate();
   const {
     control,
@@ -53,9 +37,9 @@ const UpdateUserManage = () => {
     const handleGetUser = async () => {
       const data = await axiosClient.request({
         method: "get",
-        url: `getUser/${id}`,
+        url: `get_category/${id}`,
       });
-      reset(data);
+      reset(data.data);
     };
     handleGetUser();
   }, [id]);
@@ -65,12 +49,12 @@ const UpdateUserManage = () => {
       await axiosClient
         .request({
           method: "put",
-          url: `/updateUser/${id}`,
+          url: `/update_category/${id}`,
           data: values,
         })
         .then((data) => {
-          toast.success("Cập nhật thành công");
-          navigate("/manage/user");
+          toast.success("Cập nhật danh mục thành công");
+          navigate("/manage/category");
         });
     } catch (error) {
       console.log(error);
@@ -89,39 +73,11 @@ const UpdateUserManage = () => {
       <DashboardHeading title="Update User"></DashboardHeading>
       <FormUpdateStyles className="form" onSubmit={handleSubmit(handleUpdate)}>
         <Field>
-          <Label htmlFor="fullname">Fullname</Label>
+          <Label htmlFor="categoryName">Tên danh mục</Label>
           <Input
             type="text"
-            name="fullname"
-            placeholder="Please enter you fullname"
-            control={control}
-          ></Input>
-        </Field>
-        <Field>
-          <Label htmlFor="username">Username</Label>
-          <Input
-            type="text"
-            name="username"
-            placeholder="Please enter you username"
-            control={control}
-            disabled
-          ></Input>
-        </Field>
-        <Field>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            type="text"
-            name="password"
-            placeholder="Please enter you password"
-            control={control}
-          ></Input>
-        </Field>
-        <Field>
-          <Label htmlFor="avatar">Avatar</Label>
-          <Input
-            type="text"
-            name="avatar"
-            placeholder="Please enter you avatar"
+            name="categoryName"
+            placeholder="Please enter you categoryname"
             control={control}
           ></Input>
         </Field>
@@ -135,11 +91,11 @@ const UpdateUserManage = () => {
           isLoading={isSubmitting}
           disabled={isSubmitting}
         >
-          Update User
+          Cập nhật danh mục
         </Button>
       </FormUpdateStyles>
     </div>
   );
 };
 
-export default UpdateUserManage;
+export default UpdateCategory;

@@ -64,9 +64,6 @@ const sidebarLinks = [
 const Sidebar = () => {
   return (
     <SidebarStyles className="sidebar">
-      <div className="sidebar-logo">
-        <img src="../logo.svg" alt="" />
-      </div>
       {sidebarLinks.map((link) => (
         <NavLink to={link.url} className="menu-item" key={link.title}>
           <span className="menu-icon">{link.icon}</span>

@@ -9,8 +9,8 @@ class ProductController {
       !formData.author ||
       !formData.desc ||
       !formData.year ||
-      !formData.review_count ||
-      !formData.average_score
+      !formData.category ||
+      !formData.price
     ) {
       return res
         .status(400)
@@ -38,59 +38,63 @@ class ProductController {
         res.status(400).json(`Lỗi: ${err}`);
       });
   }
-  // updateCate(req, res, next) {
-  //   const id = req.params.id;
-  //   const { categoryName } = req.body;
+  updateProduct(req, res, next) {
+    const id = req.params.id;
+    const formData = req.body;
+    if (
+      !formData.title ||
+      !formData.author ||
+      !formData.desc ||
+      !formData.year ||
+      !formData.category ||
+      !formData.price
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng điền đầy đủ thông tin!",
+      });
+    }
 
-  //   if (!categoryName) {
-  //     return res.status(400).json({
-  //       success: false,
-  //       message: "Phải nhập tên danh mục!",
-  //     });
-  //   }
+    Product.findById(id)
+      .then((product) => {
+        if (!product) {
+          res.json("Sản phẩm không tồn tại!");
+        }
+        product.title = formData.title;
+        product.slug = slugify(formData.title, { lower: true });
 
-  //   Category.findById(id)
-  //     .then((category) => {
-  //       if (!category) {
-  //         res.json("Danh mục không tồn tại!");
-  //       }
-  //       // Update the category object with the new data
-  //       category.categoryName = categoryName;
-  //       // Update the slug field based on the new categoryName value
-  //       category.slug = slugify(categoryName, { lower: true });
+        return product.save();
+      })
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: "Cập nhật danh mục thành công!",
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          success: false,
+          message: err.message || "Thất bại!",
+        });
+      });
+  }
 
-  //       return category.save();
-  //     })
-  //     .then(() => {
-  //       res.status(200).json({
-  //         success: true,
-  //         message: "Cập nhật danh mục thành công!",
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       res.status(400).json({
-  //         success: false,
-  //         message: err.message || "Thất bại!",
-  //       });
-  //     });
-  // }
-
-  // deleteCate(req, res, next) {
-  //   const id = req.params.id;
-  //   Category.deleteOne({ _id: id })
-  //     .then(() => {
-  //       res.status(200).json({
-  //         success: true,
-  //         message: "Xoá danh mục thành công",
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       res.status(400).json({
-  //         success: false,
-  //         message: `Lỗi : ${err}`,
-  //       });
-  //     });
-  // }
+  deleteProduct(req, res, next) {
+    const id = req.params.id;
+    Product.deleteOne({ _id: id })
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: "Xoá sản phẩm thành công",
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          success: false,
+          message: `Lỗi : ${err}`,
+        });
+      });
+  }
 
   // getCateAll(req, res, next) {
   //   Category.find({})
@@ -125,5 +129,19 @@ class ProductController {
   //       });
   //     });
   // }
+
+  getProductAll(req, res, next) {
+    Product.find()
+      .then((data) => {
+        res.status(200).json({
+          success: true,
+          message: "Thành công",
+          products: data,
+        });
+      })
+      .catch((err) => {
+        res.status(400).json(`Lỗi: ${err}`);
+      });
+  }
 }
 module.exports = new ProductController();

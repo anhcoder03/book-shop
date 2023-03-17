@@ -9,9 +9,8 @@ const Product = new Schema(
     author: { type: String, require: true },
     desc: { type: String, require: true },
     year: { type: Number, require: true },
-    review_count: { type: Number },
-    average_score: { type: Number },
-    categoryName: { type: String, require: true },
+    category: { type: String, require: true },
+    price: { type: Number, require: true },
     slug: { type: String, slug: "title" },
   },
   {

@@ -120,7 +120,7 @@ const Header = () => {
   const { show, setShow, dropdownRef } = useClickOutSide();
   const handleSignOut = () => {
     localStorage.clear();
-    setUser(JSON.parse(localStorage.getItem("user")));
+    setUser(null);
     toast.success("Đăng xuất thành công!");
   };
   return (
@@ -172,7 +172,7 @@ const Header = () => {
             <div className="login">
               {!user?.username ? (
                 <NavLink to={"sign-in"} className="nav-link">
-                  Đăng nhập <i class="fa-solid fa-user"></i>
+                  Đăng nhập <i className="fa-solid fa-user"></i>
                 </NavLink>
               ) : (
                 <div className="user" ref={dropdownRef}>
@@ -193,6 +193,9 @@ const Header = () => {
                     >
                       <p onClick={handleSignOut}>Đăng xuất</p>
                       <p>Cập nhật tài khoản</p>
+                      {user?.role === "Admin" ? (
+                        <NavLink to={"/dashboard"}>Dashboard</NavLink>
+                      ) : null}
                     </div>
                   )}
                 </div>

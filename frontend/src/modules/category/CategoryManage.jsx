@@ -1,106 +1,85 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import styled from "styled-components";
 import axiosClient from "../../axios/configAxios";
 import { Table } from "../../components/table";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
+import { Button } from "../../components/button";
 
-const UserManage = () => {
-  const [listUser, setListUser] = useState([]);
+const CategoryManage = () => {
+  const [listCategory, setListCategory] = useState([]);
   const navigate = useNavigate();
-  const handleGetUsers = async () => {
+  const getCategories = async () => {
     try {
       const data = await axiosClient.request({
         method: "get",
-        url: "/getUsers",
+        url: "/get_category_all",
       });
 
-      setListUser(data);
+      setListCategory(data.data);
     } catch (error) {
       toast.error("Sever error");
     }
   };
 
   useEffect(() => {
-    handleGetUsers();
+    getCategories();
   }, []);
   const handleDeleteUser = (id) => {
     Swal.fire({
-      title: "Bạn muốn xoá người dùng này?",
-      text: "Thao tác này sẽ khiến người dùng bị xoá vĩnh viễn!",
+      title: "Bạn muốn xoá danh mục này?",
+      text: "Thao tác này sẽ khiến danh mục bị xoá vĩnh viễn!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          axiosClient.request({
+          await axiosClient.request({
             method: "delete",
-            url: `/deleteUser/${id}`,
+            url: `/delete_category/${id}`,
           });
-          handleGetUsers();
+          getCategories();
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
         } catch (err) {
-          toast.error("Đã xẩy ra lỗi");
+          console.log(err);
         }
       }
     });
   };
   return (
     <div>
-      <DashboardHeading title="Quản lý người dùng">
-        <div className="mb-10 flex justify-end">
-          <div className="w-full max-w-[300px]">
-            <input
-              type="text"
-              className="w-full p-4 rounded-lg border border-solid border-gray-300"
-              placeholder="Search user..."
-            />
-          </div>
-        </div>
+      <DashboardHeading title="Quản lý danh mục">
+        <Button
+          height={"50px"}
+          onClick={() => navigate("/manage/create_category")}
+        >
+          <i className="fa-solid fa-plus"></i> Thêm danh mục
+        </Button>
       </DashboardHeading>
       <Table>
         <thead>
           <tr>
             <th>STT</th>
-            <th>Fullname</th>
-            <th>Username</th>
-            <th>Avatar</th>
-            <th>Role</th>
-            <th>Status</th>
+            <th>Name</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {listUser.length > 0 &&
-            listUser.map((item, index) => (
+          {listCategory.length > 0 &&
+            listCategory.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
-                <td>{item.fullname}</td>
-                <td>
-                  <span className="text-gray-500">{item.username}</span>
-                </td>
-                <td>
-                  <div className="flex items-center gap-x-3">
-                    <img
-                      src={item.avatar}
-                      alt=""
-                      className="w-[66px] h-[55px] rounded object-cover"
-                    />
-                  </div>
-                </td>
-                <td>{item.role}</td>
-                <td>{item.status}</td>
+                <td>{item.categoryName}</td>
                 <td>
                   <div className="flex items-center gap-x-3 text-gray-500">
                     <ActionEdit
                       onClick={() =>
-                        navigate(`/manage/update_user/${item._id}`)
+                        navigate(`/manage/update_category/${item._id}`)
                       }
                     ></ActionEdit>
                     <ActionDelete
@@ -116,4 +95,4 @@ const UserManage = () => {
   );
 };
 
-export default UserManage;
+export default CategoryManage;

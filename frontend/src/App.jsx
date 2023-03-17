@@ -1,6 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/auth-context";
+import AddCategory from "./modules/category/AddCategory";
+import CategoryManage from "./modules/category/CategoryManage";
+import UpdateCategory from "./modules/category/UpdateCategory";
 import DashboardLayout from "./modules/dashboard/DashboardLayout";
+import ProductManage from "./modules/product/ProductManage";
 import UpdateUserManage from "./modules/user/UpdateUserManage";
 import UserManage from "./modules/user/UserManage";
 import DashboardPage from "./pages/admin/DashboardPage";
@@ -31,6 +35,31 @@ function App() {
           <Route
             path="/manage/update_user/:id"
             element={<UpdateUserManage></UpdateUserManage>}
+          ></Route>
+        </Route>
+        <Route element={<DashboardLayout></DashboardLayout>}>
+          <Route
+            path="/manage/category"
+            element={<CategoryManage></CategoryManage>}
+          ></Route>
+        </Route>
+        <Route element={<DashboardLayout></DashboardLayout>}>
+          <Route
+            path="/manage/update_category/:id"
+            element={<UpdateCategory></UpdateCategory>}
+          ></Route>
+        </Route>
+        <Route element={<DashboardLayout></DashboardLayout>}>
+          <Route
+            path="/manage/create_category"
+            element={<AddCategory></AddCategory>}
+          ></Route>
+        </Route>
+
+        <Route element={<DashboardLayout></DashboardLayout>}>
+          <Route
+            path="/manage/product"
+            element={<ProductManage></ProductManage>}
           ></Route>
         </Route>
       </Routes>
