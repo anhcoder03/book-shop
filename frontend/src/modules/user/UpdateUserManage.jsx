@@ -11,16 +11,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "../../components/button";
 import { toast } from "react-toastify";
 import DashboardHeading from "../../drafts/DashboardHeading";
+import { useSelector } from "react-redux";
 
-const HeaderUserManageStyles = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  .dashboard-heading {
-    font-weight: 600;
-    font-size: 28px;
-  }
-`;
 const FormUpdateStyles = styled.form`
   width: 100%;
   max-width: 600px;
@@ -29,16 +21,17 @@ const FormUpdateStyles = styled.form`
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
   username: yup.string().required("Please enter your username"),
-  password: yup
-    .string()
-    .min(8, "Your password must be at least 8 characters or greater")
-    .required("Please enter your password"),
   avatar: yup.string().required("Please enter your avatar"),
+  email: yup
+    .string()
+    .email("Please enter valid email address")
+    .required("Please enter your email address"),
 });
 
 const UpdateUserManage = () => {
   let { id } = useParams();
-  const [user, setUser] = useState([]);
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const accessToken = user?.accessToken;
   const navigate = useNavigate();
   const {
     control,
@@ -67,6 +60,9 @@ const UpdateUserManage = () => {
           method: "put",
           url: `/updateUser/${id}`,
           data: values,
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
         })
         .then((data) => {
           toast.success("Cập nhật thành công");
@@ -107,7 +103,7 @@ const UpdateUserManage = () => {
             disabled
           ></Input>
         </Field>
-        <Field>
+        {/* <Field>
           <Label htmlFor="password">Password</Label>
           <Input
             type="text"
@@ -115,13 +111,22 @@ const UpdateUserManage = () => {
             placeholder="Please enter you password"
             control={control}
           ></Input>
-        </Field>
+        </Field> */}
         <Field>
           <Label htmlFor="avatar">Avatar</Label>
           <Input
             type="text"
             name="avatar"
             placeholder="Please enter you avatar"
+            control={control}
+          ></Input>
+        </Field>
+        <Field>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            type="text"
+            name="email"
+            placeholder="Please enter you email"
             control={control}
           ></Input>
         </Field>

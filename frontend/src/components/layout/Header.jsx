@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
+import useClickOutSide from "../../hooks/useClickOutSide";
 import { logout } from "../../redux/apiRequest";
 import { logoutSuccess } from "../../redux/authSlice";
 import { createAxios } from "../../utils/createInstance";
@@ -118,15 +119,14 @@ const HeaderStyles = styled.header`
 
 const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const { show, setShow, nodeRef } = useClickOutSide(".profile-list");
   const user = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = user?.accessToken;
-  const id = user?._id;
-  let axiosJWT = createAxios(user, dispatch, logoutSuccess);
   const handleSignOut = () => {
-    logout(dispatch, id, navigate, accessToken, axiosJWT);
-    // toast.success("Đăng xuất thành công!");
+    logout(dispatch, navigate, accessToken);
+    toast.success("Đăng xuất thành công!");
   };
   return (
     <HeaderStyles>
@@ -180,23 +180,23 @@ const Header = () => {
                   Đăng nhập <i className="fa-solid fa-user"></i>
                 </NavLink>
               ) : (
-                <div className="user">
+                <div className="user" ref={nodeRef}>
                   <div className="user-wrapper">
                     <span
                       className="fullname"
                       onClick={() => {
-                        setShowDropdown(!showDropdown);
+                        setShow(!show);
                       }}
                     >
                       <img src={user.avatar} className="user-avatar" alt="" />
                       {user.fullname}
                     </span>
                   </div>
-                  <div className={`action-user ${showDropdown ? "show" : ""}`}>
+                  <div className={`action-user ${show ? "show" : ""}`}>
                     <p onClick={handleSignOut}>Đăng xuất</p>
                     <p>Cập nhật tài khoản</p>
                     {user?.admin === true ? (
-                      <NavLink to={"/dashboard"}>Dashboard</NavLink>
+                      <p onClick={() => navigate("/dashboard")}>Dashboard</p>
                     ) : null}
                   </div>
                 </div>

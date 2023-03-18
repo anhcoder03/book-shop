@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 const DashboardHeaderStyles = styled.div`
   background-color: white;
@@ -26,7 +27,7 @@ const DashboardHeaderStyles = styled.div`
 `;
 
 const DashboardHeader = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const user = useSelector((state) => state.auth.login?.currentUser);
   return (
     <DashboardHeaderStyles>
       <div className="sidebar-logo">

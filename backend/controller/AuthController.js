@@ -101,7 +101,7 @@ class UserController {
     const id = req.params.id;
     User.findOne({ _id: id })
       .then((user) => {
-        res.json(users);
+        res.json(user);
       })
       .catch((err) => {
         return res.status(500).json("Lỗi server");
@@ -113,13 +113,9 @@ class UserController {
     const formData = req.body;
     User.findOne({ _id: id })
       .then((data) => {
-        return bcrypt.hash(formData.password, 12);
-      })
-      .then((hashedPassword) => {
         const user = {
           fullname: formData.fullname,
           username: formData.username,
-          password: hashedPassword,
           avatar: formData.avatar,
         };
         User.updateOne({ _id: id }, user)

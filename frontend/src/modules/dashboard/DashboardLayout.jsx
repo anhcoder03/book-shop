@@ -28,7 +28,7 @@ const DashboardLayout = ({ children }) => {
     }
     if (!user.admin) {
       navigate("/");
-      toast.warning("Bạn không có quyền quản trị");
+      toast.warning("Tài khoản của bạn không phải là người quản trị");
     }
   }, [user]);
   return (

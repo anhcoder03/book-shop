@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import styled from "styled-components";
 import axiosClient from "../../axios/configAxios";
 import { Table } from "../../components/table";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteUser, getUserAll } from "../../redux/apiRequest";
 
 const UserManage = () => {
+  const [listUser, setListUser] = useState([]);
   const user = useSelector((state) => state.auth.login?.currentUser);
-  const dispatch = useDispatch();
-  const listUser = useSelector((state) => state.users.users?.allUser);
   const navigate = useNavigate();
+  const handleGetUsers = async () => {
+    try {
+      const data = await axiosClient.request({
+        method: "get",
+        url: "/getUsers",
+      });
+
+      setListUser(data);
+    } catch (error) {
+      toast.error("Sever error");
+    }
+  };
 
   useEffect(() => {
-    if (user?.accessToken) {
-      getUserAll(user?.accessToken, dispatch);
-    }
+    handleGetUsers();
   }, []);
   const handleDeleteUser = (id) => {
     Swal.fire({
@@ -32,25 +39,22 @@ const UserManage = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteUser(user?.accessToken, dispatch, id);
-        getUserAll(user?.accessToken, dispatch);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        try {
+          axiosClient.request({
+            method: "delete",
+            url: `/deleteUser/${id}`,
+          });
+          handleGetUsers();
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        } catch (err) {
+          toast.error("Đã xẩy ra lỗi");
+        }
       }
     });
   };
   return (
     <div>
-      <DashboardHeading title="Quản lý người dùng">
-        <div className="mb-10 flex justify-end">
-          <div className="w-full max-w-[300px]">
-            <input
-              type="text"
-              className="w-full p-4 rounded-lg border border-solid border-gray-300"
-              placeholder="Search user..."
-            />
-          </div>
-        </div>
-      </DashboardHeading>
+      <DashboardHeading title="Quản lý người dùng"></DashboardHeading>
       <Table>
         <thead>
           <tr>
@@ -64,8 +68,8 @@ const UserManage = () => {
           </tr>
         </thead>
         <tbody>
-          {listUser?.length > 0 &&
-            listUser?.map((item, index) => (
+          {listUser.length > 0 &&
+            listUser.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
                 <td>{item.fullname}</td>
@@ -81,7 +85,7 @@ const UserManage = () => {
                     />
                   </div>
                 </td>
-                <td>{item.admin ? "Admin" : "User"}</td>
+                <td>{item.admin === true ? "Admin" : "User"}</td>
                 <td>{item.status}</td>
                 <td>
                   <div className="flex items-center gap-x-3 text-gray-500">
