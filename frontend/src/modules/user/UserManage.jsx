@@ -7,25 +7,19 @@ import { Table } from "../../components/table";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteUser, getUserAll } from "../../redux/apiRequest";
 
 const UserManage = () => {
-  const [listUser, setListUser] = useState([]);
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const dispatch = useDispatch();
+  const listUser = useSelector((state) => state.users.users?.allUser);
   const navigate = useNavigate();
-  const handleGetUsers = async () => {
-    try {
-      const data = await axiosClient.request({
-        method: "get",
-        url: "/getUsers",
-      });
-
-      setListUser(data);
-    } catch (error) {
-      toast.error("Sever error");
-    }
-  };
 
   useEffect(() => {
-    handleGetUsers();
+    if (user?.accessToken) {
+      getUserAll(user?.accessToken, dispatch);
+    }
   }, []);
   const handleDeleteUser = (id) => {
     Swal.fire({
@@ -38,16 +32,9 @@ const UserManage = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          axiosClient.request({
-            method: "delete",
-            url: `/deleteUser/${id}`,
-          });
-          handleGetUsers();
-          Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        } catch (err) {
-          toast.error("Đã xẩy ra lỗi");
-        }
+        deleteUser(user?.accessToken, dispatch, id);
+        getUserAll(user?.accessToken, dispatch);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
       }
     });
   };
@@ -77,8 +64,8 @@ const UserManage = () => {
           </tr>
         </thead>
         <tbody>
-          {listUser.length > 0 &&
-            listUser.map((item, index) => (
+          {listUser?.length > 0 &&
+            listUser?.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
                 <td>{item.fullname}</td>
@@ -94,7 +81,7 @@ const UserManage = () => {
                     />
                   </div>
                 </td>
-                <td>{item.role}</td>
+                <td>{item.admin ? "Admin" : "User"}</td>
                 <td>{item.status}</td>
                 <td>
                   <div className="flex items-center gap-x-3 text-gray-500">

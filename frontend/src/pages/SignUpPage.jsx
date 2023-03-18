@@ -19,6 +19,10 @@ const schema = yup.object({
     .string()
     .min(8, "Your password must be at least 8 characters or greater")
     .required("Please enter your password"),
+  email: yup
+    .string()
+    .email("Please enter valid email address")
+    .required("Please enter your email address"),
 });
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -104,6 +108,15 @@ const SignUpPage = () => {
               ></IconEyeOpen>
             )}
           </Input>
+        </Field>
+        <Field>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            type="text"
+            name="email"
+            placeholder="Please enter you email"
+            control={control}
+          ></Input>
         </Field>
         <div className="have-account">
           You already have an account? <NavLink to={"/sign-in"}>Login</NavLink>

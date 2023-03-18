@@ -1,8 +1,10 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
+let refreshTokens = [];
 class UserController {
-  register(req, res, next) {
+  register(req, res) {
     const formData = req.body;
     User.findOne({ username: formData.username })
       .then((data) => {
@@ -15,6 +17,7 @@ class UserController {
         const user = new User({
           fullname: formData.fullname,
           username: formData.username,
+          email: formData.email,
           password: hashedPassword,
         });
         return user.save();
@@ -29,7 +32,7 @@ class UserController {
         res.status(400).json("Loi cmnr");
       });
   }
-  login(req, res, next) {
+  login = async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
       return res.status(400).json("Missing username and/or password");
@@ -39,7 +42,7 @@ class UserController {
         if (!user) {
           return res
             .status(400)
-            .json({ success: false, message: "Username không tồn tại!" });
+            .json({ success: false, message: "Username không đúng!" });
         }
         bcrypt.compare(password, user.password).then((isMatch) => {
           if (!isMatch) {
@@ -47,21 +50,48 @@ class UserController {
               .status(400)
               .json({ success: false, message: "Mật khẩu không đúng!" });
           }
-          return res.status(200).json({
-            success: true,
-            message: "Đăng nhập thành công!",
-            data: user,
-          });
+          if (user && isMatch) {
+            const accessToken = jwt.sign(
+              {
+                id: user._id,
+                admin: user.admin,
+              },
+              process.env.ACCESS_KEY,
+              { expiresIn: "1d" }
+            );
+            const refreshToken = jwt.sign(
+              {
+                id: user._id,
+                admin: user.admin,
+              },
+              process.env.REFRESH_KEY,
+              { expiresIn: "30d" }
+            );
+            refreshTokens.push(refreshToken);
+            res.cookie("refreshToken", refreshToken, {
+              httpOnly: true,
+              secure: false,
+              path: "/",
+              sameSite: "strict",
+            });
+            const { password, ...rest } = user._doc;
+            res.status(200).json({
+              success: true,
+              message: "Đăng nhập thành công!",
+              ...rest,
+              accessToken,
+            });
+          }
         });
       });
     } catch (err) {
       return res.status(400).json("Lỗi");
     }
-  }
+  };
   getUsers(req, res, next) {
     User.find({})
-      .then((data) => {
-        res.json(data);
+      .then((users) => {
+        res.json(users);
       })
       .catch((err) => {
         return res.status(403).json("Lỗi server");
@@ -70,8 +100,8 @@ class UserController {
   getUser(req, res, next) {
     const id = req.params.id;
     User.findOne({ _id: id })
-      .then((data) => {
-        res.json(data);
+      .then((user) => {
+        res.json(users);
       })
       .catch((err) => {
         return res.status(500).json("Lỗi server");
@@ -110,11 +140,66 @@ class UserController {
     const id = req.params.id;
     User.deleteOne({ _id: id })
       .then(() => {
-        res.json("xoá cmnr");
+        res.status(200).json("Xoá user thành công");
       })
       .catch((err) => {
-        res.json(err);
+        res.status(403).json("Xoá user thất bại");
       });
   }
+
+  //create new refresh token
+
+  createNewRefreshToken = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json("You're not authenticated");
+    }
+    if (!refreshTokens.includes(refreshToken)) {
+      return res.status(403).json("Refresh token is not valid");
+    }
+    jwt.verify(refreshToken, process.env.REFRESH_KEY, (err, user) => {
+      if (err) {
+        return res.json(401).json(err);
+      }
+      refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+      const newAccessToken = jwt.sign(
+        {
+          id: user._id,
+          admin: user.admin,
+        },
+        process.env.ACCESS_KEY,
+        { expiresIn: "1d" }
+      );
+      const newRefreshToken = jwt.sign(
+        {
+          id: user._id,
+          admin: user.admin,
+        },
+        process.env.ACCESS_KEY,
+        { expiresIn: "30d" }
+      );
+      refreshTokens(newRefreshToken);
+      res.cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: false,
+        path: "/",
+        sameSite: "strict",
+      });
+      res.status(200).json({
+        accessToken: newAccessToken,
+      });
+    });
+  };
+
+  logout = async (req, res) => {
+    res.clearCookie("refreshToken");
+    refreshTokens = refreshTokens.filter(
+      (token) => token !== req.cookies.refreshToken
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Đăng xuất thành công!",
+    });
+  };
 }
 module.exports = new UserController();

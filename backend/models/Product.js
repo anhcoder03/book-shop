@@ -11,6 +11,7 @@ const Product = new Schema(
     year: { type: Number, require: true },
     category: { type: String, require: true },
     price: { type: Number, require: true },
+    image: { type: String, require: true },
     slug: { type: String, slug: "title" },
   },
   {

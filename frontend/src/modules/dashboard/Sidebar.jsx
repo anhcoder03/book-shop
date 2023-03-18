@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 const SidebarStyles = styled.div`
-  width: 300px;
+  width: 200px;
   background: #ffffff;
   box-shadow: 10px 10px 20px rgba(218, 213, 213, 0.15);
   border-radius: 12px;

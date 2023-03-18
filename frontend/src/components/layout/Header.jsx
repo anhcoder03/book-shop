@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import useClickOutSide from "../../hooks/useClickOutSide";
+import { logout } from "../../redux/apiRequest";
+import { logoutSuccess } from "../../redux/authSlice";
+import { createAxios } from "../../utils/createInstance";
 
 const HeaderStyles = styled.header`
   padding: 20px 0;
@@ -114,13 +117,16 @@ const HeaderStyles = styled.header`
 `;
 
 const Header = () => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [showDropdown, setShowDropdown] = useState(false);
-  const { show, setShow, dropdownRef } = useClickOutSide();
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const accessToken = user?.accessToken;
+  const id = user?._id;
+  let axiosJWT = createAxios(user, dispatch, logoutSuccess);
   const handleSignOut = () => {
-    localStorage.clear();
-    setUser(null);
-    toast.success("Đăng xuất thành công!");
+    logout(dispatch, id, navigate, accessToken, axiosJWT);
+    // toast.success("Đăng xuất thành công!");
   };
   return (
     <HeaderStyles>
@@ -169,34 +175,30 @@ const Header = () => {
           </div>
           <div className="header-right">
             <div className="login">
-              {!user?.username ? (
+              {!user ? (
                 <NavLink to={"sign-in"} className="nav-link">
                   Đăng nhập <i className="fa-solid fa-user"></i>
                 </NavLink>
               ) : (
-                <div className="user" ref={dropdownRef}>
+                <div className="user">
                   <div className="user-wrapper">
                     <span
                       className="fullname"
                       onClick={() => {
-                        setShow(!show), setShowDropdown(!showDropdown);
+                        setShowDropdown(!showDropdown);
                       }}
                     >
                       <img src={user.avatar} className="user-avatar" alt="" />
                       {user.fullname}
                     </span>
                   </div>
-                  {show && (
-                    <div
-                      className={`action-user ${showDropdown ? "show" : ""}`}
-                    >
-                      <p onClick={handleSignOut}>Đăng xuất</p>
-                      <p>Cập nhật tài khoản</p>
-                      {user?.role === "Admin" ? (
-                        <NavLink to={"/dashboard"}>Dashboard</NavLink>
-                      ) : null}
-                    </div>
-                  )}
+                  <div className={`action-user ${showDropdown ? "show" : ""}`}>
+                    <p onClick={handleSignOut}>Đăng xuất</p>
+                    <p>Cập nhật tài khoản</p>
+                    {user?.admin === true ? (
+                      <NavLink to={"/dashboard"}>Dashboard</NavLink>
+                    ) : null}
+                  </div>
                 </div>
               )}
             </div>

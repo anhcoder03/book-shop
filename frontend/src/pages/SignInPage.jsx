@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 import axiosClient from "../axios/configAxios";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useAuth } from "../contexts/auth-context";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/apiRequest";
 
 const schema = yup.object({
   username: yup.string().required("Please enter your username"),
@@ -24,13 +26,9 @@ const schema = yup.object({
 
 const SignInPage = () => {
   const navigate = useNavigate();
-  const { userInfo } = useAuth();
-  useEffect(() => {
-    if (userInfo?.fullname) {
-      navigate("/");
-      toast.error("Vui lòng đăng xuất tài khoản để đăng nhập lại!");
-    }
-  }, [userInfo]);
+  const dispatch = useDispatch();
+  const authError = useSelector((state) => state.auth.login.error);
+  const authSuccess = useSelector((state) => state.auth.login.currentUser);
   const {
     control,
     handleSubmit,
@@ -42,23 +40,7 @@ const SignInPage = () => {
   const [togglePassword, setTogglePassword] = useState(false);
   const handleSignIn = async (values) => {
     if (!isValid) return;
-    try {
-      await axiosClient
-        .request({
-          method: "post",
-          url: "/login",
-          data: { ...values },
-        })
-        .then(({ data }) => {
-          localStorage.setItem("user", JSON.stringify(data));
-          toast.success("Bạn đã đăng nhập thành công");
-          navigate("/");
-        });
-    } catch (error) {
-      console.log(error);
-      const message = error.response.data.message;
-      toast.error(message);
-    }
+    login(values, dispatch, navigate);
   };
   useEffect(() => {
     const arrayError = Object.values(errors);
@@ -66,66 +48,70 @@ const SignInPage = () => {
       toast.error(arrayError[0]?.message);
     }
   }, [errors]);
+  useEffect(() => {
+    if (authError) toast.error(authError.message);
+  }, [authError]);
+  useEffect(() => {
+    if (authSuccess) toast.success(authSuccess.message);
+  }, [authSuccess]);
   return (
     <Fragment>
-      {!userInfo ? (
-        <AuthenticationPage>
-          <form
-            className="form"
-            onSubmit={handleSubmit(handleSignIn)}
-            autoComplete="off"
-          >
-            <Field>
-              <Label htmlFor="username">Username</Label>
-              <Input
-                type="text"
-                name="username"
-                placeholder="Please enter you email address"
-                control={control}
-              ></Input>
-            </Field>
-            <Field>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                type={togglePassword ? "text" : "password"}
-                name="password"
-                placeholder="Please enter you password"
-                control={control}
-              >
-                {!togglePassword ? (
-                  <IconEyeClose
-                    onClick={() => {
-                      setTogglePassword((t) => !t);
-                    }}
-                  ></IconEyeClose>
-                ) : (
-                  <IconEyeOpen
-                    onClick={() => {
-                      setTogglePassword((t) => !t);
-                    }}
-                  ></IconEyeOpen>
-                )}
-              </Input>
-            </Field>
-            <div className="have-account">
-              You have not had an account?
-              <NavLink to={"/sign-up"}>Register an account</NavLink>
-            </div>
-            <Button
-              type="submit"
-              style={{
-                maxWidth: 300,
-                margin: "0 auto",
-              }}
-              width={"100%"}
-              isLoading={isSubmitting}
-              disabled={isSubmitting}
+      <AuthenticationPage>
+        <form
+          className="form"
+          onSubmit={handleSubmit(handleSignIn)}
+          autoComplete="off"
+        >
+          <Field>
+            <Label htmlFor="username">Username</Label>
+            <Input
+              type="text"
+              name="username"
+              placeholder="Please enter you email address"
+              control={control}
+            ></Input>
+          </Field>
+          <Field>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              type={togglePassword ? "text" : "password"}
+              name="password"
+              placeholder="Please enter you password"
+              control={control}
             >
-              Sign In
-            </Button>
-          </form>
-        </AuthenticationPage>
-      ) : null}
+              {!togglePassword ? (
+                <IconEyeClose
+                  onClick={() => {
+                    setTogglePassword((t) => !t);
+                  }}
+                ></IconEyeClose>
+              ) : (
+                <IconEyeOpen
+                  onClick={() => {
+                    setTogglePassword((t) => !t);
+                  }}
+                ></IconEyeOpen>
+              )}
+            </Input>
+          </Field>
+          <div className="have-account">
+            You have not had an account?
+            <NavLink to={"/sign-up"}>Register an account</NavLink>
+          </div>
+          <Button
+            type="submit"
+            style={{
+              maxWidth: 300,
+              margin: "0 auto",
+            }}
+            width={"100%"}
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            Sign In
+          </Button>
+        </form>
+      </AuthenticationPage>
     </Fragment>
   );
 };

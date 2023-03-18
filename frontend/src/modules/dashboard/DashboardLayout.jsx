@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -11,26 +12,25 @@ const DashboardStyles = styled.div`
   .dashboard {
     &-main {
       display: grid;
-      grid-template-columns: 300px minmax(0, 1fr);
+      grid-template-columns: 200px minmax(0, 1fr);
       padding: 40px 20px;
       gap: 0 40px;
     }
   }
 `;
 const DashboardLayout = ({ children }) => {
+  const user = useSelector((state) => state.auth.login?.currentUser);
   const navigate = useNavigate();
-  const { userInfo } = useAuth();
   useEffect(() => {
-    if (!userInfo) {
-      navigate("/");
-      toast.warning("Vui lòng đăng nhập để sử dụng tính năng này!");
+    if (!user) {
+      navigate("/sign-in");
+      toast.warning("Đăng nhập để vào trang quản trị!");
     }
-    if (userInfo?.role === "User") {
-      toast.error("Không đủ quyền!");
+    if (!user.admin) {
       navigate("/");
+      toast.warning("Bạn không có quyền quản trị");
     }
-    console.log(userInfo?.role);
-  }, [userInfo]);
+  }, [user]);
   return (
     <DashboardStyles>
       <DashboardHeader></DashboardHeader>

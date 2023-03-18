@@ -19,6 +19,10 @@ const FormUpdateStyles = styled.form`
   margin: 50px auto;
 `;
 const schema = yup.object({
+  category: yup
+    .string()
+    .required("Vui lòng phân loại danh mục!")
+    .oneOf(["sach-thieu-nhi", "sach-tieng-anh", "sach-van-hoc"]),
   title: yup.string().required("Vui lòng nhập tên title!"),
   author: yup.string().required("Vui lòng nhập tên author!"),
   year: yup
@@ -30,10 +34,7 @@ const schema = yup.object({
     .min(0, "Giá phải lớn hơn 0")
     .required("Vui lòng nhập giá sản phẩm!"),
   desc: yup.string().required("Vui lòng nhập mô tả sản phẩm!"),
-  category: yup
-    .string()
-    .required("Vui lòng phân loại danh mục!")
-    .oneOf(["sach-thieu-nhi", "sach-tieng-anh", "sach-van-hoc"]),
+  image: yup.string().required("Vui lòng nhập ảnh sản phẩm!"),
 });
 
 const AddProduct = () => {
@@ -100,6 +101,16 @@ const AddProduct = () => {
         onSubmit={handleSubmit(handleCreateProduct)}
       >
         <Field>
+          <Label htmlFor="category">Danh mục</Label>
+          <DropdownCategory
+            control={control}
+            setValue={setValue}
+            name="category"
+            data={listCategory}
+            dropdownLabel="Phân loại danh mục"
+          ></DropdownCategory>
+        </Field>
+        <Field>
           <Label htmlFor="title">Title</Label>
           <Input
             type="text"
@@ -145,14 +156,13 @@ const AddProduct = () => {
           ></Input>
         </Field>
         <Field>
-          <Label htmlFor="category">Danh mục</Label>
-          <DropdownCategory
+          <Label htmlFor="image">Ảnh sản phẩm</Label>
+          <Input
+            type="text"
+            name="image"
+            placeholder="Please enter you image"
             control={control}
-            setValue={setValue}
-            name="category"
-            data={listCategory}
-            dropdownLabel="Phân loại danh mục"
-          ></DropdownCategory>
+          ></Input>
         </Field>
         <Button
           type="submit"

@@ -34,7 +34,7 @@ const DropdownCategory = ({
         <span>{label}</span>
       </div>
       <div
-        className={`absolute top-full left-0 w-full rounded-lg bg-white ${
+        className={`absolute top-full left-0 w-full z-10 rounded-lg bg-white ${
           show ? "" : "opacity-0 invisible"
         }`}
       >

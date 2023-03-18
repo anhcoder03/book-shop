@@ -10,9 +10,9 @@ import { Button } from "../../components/button";
 import GetData from "../../components/common/GetData";
 
 const ProductManage = ({ data }) => {
-  const listProduct = data.products;
-  console.log(listProduct);
+  const [listProduct, setListProduct] = useState(data.products); // Define state variable
   const navigate = useNavigate();
+
   const handleDeleteProduct = (id) => {
     Swal.fire({
       title: "Bạn muốn sản phẩm này?",
@@ -29,7 +29,8 @@ const ProductManage = ({ data }) => {
             method: "delete",
             url: `/delete_product/${id}`,
           });
-          handleGetProducts();
+          const updatedList = listProduct.filter((item) => item._id !== id); // Filter out deleted product from list
+          setListProduct(updatedList); // Update state
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
         } catch (err) {
           toast.error("Đã xẩy ra lỗi");
@@ -37,6 +38,7 @@ const ProductManage = ({ data }) => {
       }
     });
   };
+
   return (
     <div>
       <DashboardHeading title="Quản lý sản phẩm">
@@ -51,6 +53,7 @@ const ProductManage = ({ data }) => {
         <thead>
           <tr>
             <th>STT</th>
+            <th>Ảnh</th>
             <th>Title</th>
             <th>Author</th>
             <th>Description</th>
@@ -64,6 +67,9 @@ const ProductManage = ({ data }) => {
             listProduct.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
+                <td>
+                  <img src={item.image || item.tile} alt="" />
+                </td>
                 <td className="truncate max-w-[200px]">{item.title}</td>
                 <td className="max-w-[200px]">
                   <span className="text-gray-500 truncate">{item.author}</span>

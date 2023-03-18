@@ -10,6 +10,8 @@ function router(app) {
   app.post("/login", authRouter);
   app.put("/updateUser/:id", authRouter);
   app.delete("/deleteUser/:id", authRouter);
+  app.post("/refreshToken", authRouter);
+  app.post("/logout", authRouter);
 
   //category
 

@@ -47,7 +47,8 @@ class ProductController {
       !formData.desc ||
       !formData.year ||
       !formData.category ||
-      !formData.price
+      !formData.price ||
+      !formData.image
     ) {
       return res.status(400).json({
         success: false,
