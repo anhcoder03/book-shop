@@ -24,7 +24,7 @@ const slideImages = [
 ];
 const Slider = () => {
   return (
-    <section className="banner h-[500px] page-container mb-20 overflow-hidden">
+    <section className="banner page-container mb-16 overflow-hidden">
       <Swiper
         grabCursor="true"
         slidesPerView={"auto"}

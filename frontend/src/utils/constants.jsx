@@ -8,4 +8,5 @@ export const theme = {
   gray23: "#232323",
   gray80: "#808191",
   black: "#171725",
+  red: "#C92127",
 };

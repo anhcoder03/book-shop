@@ -62,6 +62,28 @@ const HeaderStyles = styled.header`
   .login .nav-link {
     color: #000;
   }
+  .cart-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100rem;
+    background-color: #f0f0f0;
+    color: #444;
+    width: 50px;
+    height: 50px;
+    position: relative;
+  }
+  .cart-total {
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: -10px;
+    background-color: ${(props) => props.theme.red};
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 100rem;
+  }
   .cart-icon:hover,
   .login .nav-link:hover {
     color: #ff6651;
@@ -140,7 +162,7 @@ const Header = () => {
             <input
               type="text"
               className="search-input"
-              placeholder="Search posts..."
+              placeholder="Tìm kiếm sách..."
             />
             <span className="search-icon">
               <svg
@@ -204,6 +226,7 @@ const Header = () => {
             </div>
             <div className="cart-icon">
               <i className="fa-sharp fa-solid fa-cart-shopping"></i>
+              <span className="cart-total">0</span>
             </div>
           </div>
         </div>

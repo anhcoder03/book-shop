@@ -99,7 +99,9 @@ class ProductController {
   }
   getProductByCategory(req, res, next) {
     const category = req.params.category;
+    const litmit = req.query.limit ? parseInt(req.query.limit) : 10;
     Product.find({ category: category })
+      .limit(litmit)
       .then((data) => {
         if (!data) {
           res.status(404).json({
