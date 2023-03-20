@@ -1,4 +1,4 @@
 import IconEyeOpen from "./IconEyeOpen";
 import IconEyeClose from "./IconEyeClose";
-
-export { IconEyeOpen, IconEyeClose };
+import IconSearch from "./IconSearch";
+export { IconEyeOpen, IconEyeClose, IconSearch };

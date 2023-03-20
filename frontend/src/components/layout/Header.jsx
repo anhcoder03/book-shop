@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import useClickOutSide from "../../hooks/useClickOutSide";
 import { logout } from "../../redux/apiRequest";
-import { logoutSuccess } from "../../redux/authSlice";
-import { createAxios } from "../../utils/createInstance";
+import { InputSearch } from "../input";
+import { debounce } from "lodash";
 
 const HeaderStyles = styled.header`
   padding: 20px 0;
   border-bottom: 1px solid #d1d1d1;
+  width: 100%;
+  background-color: white;
   .header-main {
     display: flex;
     align-items: center;
@@ -19,35 +21,6 @@ const HeaderStyles = styled.header`
   .logo {
     display: block;
     max-width: 200px;
-  }
-  .search {
-    display: flex;
-    align-items: center;
-    padding: 12px 25px;
-    border: 1px solid #eee;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 500px;
-    position: relative;
-  }
-  .search-input {
-    flex: 1;
-    padding-right: 80px;
-    font-weight: 500;
-  }
-  .search-icon {
-    position: absolute;
-    background-color: #ff6651;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    border-radius: 20px;
-    right: 4px;
-    cursor: pointer;
   }
 
   .header-right {
@@ -140,8 +113,7 @@ const HeaderStyles = styled.header`
 `;
 
 const Header = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const { show, setShow, nodeRef } = useClickOutSide(".profile-list");
+  const { show, setShow, nodeRef } = useClickOutSide(".action-user");
   const user = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -150,51 +122,32 @@ const Header = () => {
     logout(dispatch, navigate, accessToken);
     toast.success("Đăng xuất thành công!");
   };
+
+  const HeadRef = useRef(null);
+  useEffect(() => {
+    const windowScroollHandler = debounce((e) => {
+      if (window.window.scrollY > HeadRef.current.clientHeight) {
+        HeadRef.current.classList.add("header-fixed");
+        document.body.style.paddingTop = HeadRef.current.clientHeight + "px";
+      } else if (window.window.scrollY < HeadRef.current.clientHeight) {
+        HeadRef.current.classList.remove("header-fixed");
+        document.body.style.paddingTop = "0px";
+      }
+    }, 500);
+    window.addEventListener("scroll", windowScroollHandler);
+    return () => {
+      window.removeEventListener("scroll", windowScroollHandler);
+    };
+  }, []);
+
   return (
-    <HeaderStyles>
-      <div className="header-top"></div>
+    <HeaderStyles ref={HeadRef}>
       <div className="container">
         <div className="header-main">
           <NavLink href="/">
             <img src="logo.svg" alt="" className="logo" />
           </NavLink>
-          <div className="search">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Tìm kiếm sách..."
-            />
-            <span className="search-icon">
-              <svg
-                width="18"
-                height="17"
-                viewBox="0 0 18 17"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <ellipse
-                  cx="7.66669"
-                  cy="7.05161"
-                  rx="6.66669"
-                  ry="6.05161"
-                  stroke="#fff"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d="M17.0001 15.5237L15.2223 13.9099L14.3334 13.103L12.5557 11.4893"
-                  stroke="#fff"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M11.6665 12.2964C12.9671 12.1544 13.3706 11.8067 13.4443 10.6826"
-                  stroke="#fff"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-          </div>
+          <InputSearch></InputSearch>
           <div className="header-right">
             <div className="login">
               {!user ? (

@@ -8,7 +8,7 @@ const menuLinks = [
     title: "Trang chủ",
   },
   {
-    url: "/products",
+    url: "/product",
     title: "Sản Phẩm",
   },
   {

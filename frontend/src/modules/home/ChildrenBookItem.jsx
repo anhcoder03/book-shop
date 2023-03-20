@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import formatPrice from "../../utils/formatPrice";
 
-const LiteratureItemStyles = styled.div`
+const ChildrenBookItemStyles = styled.div`
   padding: 20px 10px;
   transition: all 0.2s linear;
   &:hover {
@@ -44,9 +44,9 @@ const LiteratureItemStyles = styled.div`
   }
 `;
 
-function LiteratureItem({ item }) {
+function ChildrenBookItem({ item }) {
   return (
-    <LiteratureItemStyles key={item._id}>
+    <ChildrenBookItemStyles key={item._id}>
       <div className="product-image">
         <NavLink to={`/product-detail/${item.slug}`}>
           <img src={item.image} className="image" alt={item.slug} />
@@ -58,8 +58,8 @@ function LiteratureItem({ item }) {
         </NavLink>
         <p className="product-price">{formatPrice(item.price)} đ</p>
       </div>
-    </LiteratureItemStyles>
+    </ChildrenBookItemStyles>
   );
 }
 
-export default LiteratureItem;
+export default ChildrenBookItem;

@@ -2,10 +2,12 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import GetData from "../../components/common/GetData";
+import ChildrenBookItem from "./ChildrenBookItem";
 
-import LiteratureItem from "./LiteratureItem";
+// import LiteratureItem from "./LiteratureItem";
 
-const LiteratureStyles = styled.div`
+const ChildrenBookStyles = styled.div`
+  margin-top: 50px;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   .heading {
@@ -18,12 +20,13 @@ const LiteratureStyles = styled.div`
   }
 `;
 
-const Literature = ({ data }) => {
+const ChildrenBook = ({ data }) => {
   const listBook = data?.data;
+  console.log(listBook);
   return (
-    <LiteratureStyles>
+    <ChildrenBookStyles>
       <div className="flex items-center justify-between mb-5">
-        <h1 className="heading">Sách Văn Học</h1>
+        <h1 className="heading">Sách Thiếu Nhi</h1>
         <hr className="w-full" />
         <NavLink
           className="w-[150px] ml-5 block bg-primary text-center
@@ -36,11 +39,11 @@ const Literature = ({ data }) => {
       <div className="celeb-list grid grid-cols-2 lg:grid-cols-5 gap-3">
         {listBook.length > 0 &&
           listBook.map((item) => (
-            <LiteratureItem item={item} key={item._id}></LiteratureItem>
+            <ChildrenBookItem item={item} key={item._id}></ChildrenBookItem>
           ))}
       </div>
-    </LiteratureStyles>
+    </ChildrenBookStyles>
   );
 };
 // /product_of_category/:category
-export default GetData(Literature, "/product_of_category/sach-van-hoc");
+export default GetData(ChildrenBook, "/product_of_category/sach-thieu-nhi");

@@ -41,22 +41,22 @@ const ServiceStyles = styled.div`
 `;
 const listService = [
   {
-    icon: <i class="fa-solid fa-truck"></i>,
+    icon: <i className="fa-solid fa-truck"></i>,
     title: "Giao hàng nhanh chóng",
     text: "Chỉ từ 3 -5 ngày",
   },
   {
-    icon: <i class="fa-solid fa-money-check-dollar"></i>,
+    icon: <i className="fa-solid fa-money-check-dollar"></i>,
     title: "Đảm bảo tiền",
     text: "7 ngày trở lại",
   },
   {
-    icon: <i class="fa-solid fa-clock-rotate-left"></i>,
+    icon: <i className="fa-solid fa-clock-rotate-left"></i>,
     title: "365 ngày",
     text: "Để được trả lại miễn phí",
   },
   {
-    icon: <i class="fa-solid fa-building-columns"></i>,
+    icon: <i className="fa-solid fa-building-columns"></i>,
     title: "Sự chi trả",
     text: "Hệ thống an toàn",
   },
@@ -66,7 +66,7 @@ const Service = () => {
     <ServiceStyles>
       {listService.length > 0 &&
         listService.map((item) => (
-          <div className="service-item">
+          <div className="service-item" key={item.title}>
             <div className="service-icon">{item.icon}</div>
             <div className="service-content">
               <h4 className="service-title">{item.title}</h4>

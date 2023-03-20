@@ -77,3 +77,12 @@ body {
   background-color: #ee3e38;
   border-radius: 5px;
 }
+.header-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  transition: all 0.5s linear;
+  border-bottom: 0 !important;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}

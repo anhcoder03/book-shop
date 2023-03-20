@@ -55,22 +55,22 @@ class ProductController {
         message: "Vui lòng điền đầy đủ thông tin!",
       });
     }
-
-    Product.findById(id)
-      .then((product) => {
-        if (!product) {
-          res.json("Sản phẩm không tồn tại!");
-        }
-        product.title = formData.title;
-        product.slug = slugify(formData.title, { lower: true });
-
-        return product.save();
-      })
-      .then((data) => {
+    const newSlug = slugify(formData.title, { lower: true });
+    const data = {
+      title: formData.title,
+      author: formData.author,
+      desc: formData.desc,
+      year: formData.year,
+      category: formData.category,
+      price: formData.price,
+      image: formData.image,
+      slug: newSlug,
+    };
+    Product.updateOne({ _id: id }, data)
+      .then(() => {
         res.status(200).json({
           success: true,
           message: "Cập nhật danh mục thành công!",
-          data: data,
         });
       })
       .catch((err) => {
@@ -154,9 +154,21 @@ class ProductController {
       });
   }
 
-  getProductAll(req, res, next) {
+  getProductAll = async (req, res, next) => {
+    let { search } = req.query;
     const litmit = req.query.limit ? parseInt(req.query.limit) : 15;
-    Product.find()
+    if (search && search.length > 0) {
+      const query = search.replace(/['"]+/g, "");
+      let replace = `${query}`;
+      let re = new RegExp(replace, "i");
+      const data = await Product.find({ title: re });
+      return res.status(200).jsonp({
+        success: true,
+        message: `Thành công`,
+        data: data,
+      });
+    }
+    await Product.find()
       .limit(litmit)
       .then((data) => {
         res.status(200).json({
@@ -168,6 +180,6 @@ class ProductController {
       .catch((err) => {
         res.status(400).json(`Lỗi: ${err}`);
       });
-  }
+  };
 }
 module.exports = new ProductController();

@@ -12,6 +12,8 @@ import UserManage from "./modules/user/UserManage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import HomePage from "./pages/HomePage";
 import PageNotFound from "./pages/PageNotFound";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import ProductPage from "./pages/ProductPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 
@@ -22,6 +24,11 @@ function App() {
         <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route path="sign-up" element={<SignUpPage></SignUpPage>}></Route>
         <Route path="sign-in" element={<SignInPage></SignInPage>}></Route>
+        <Route path="/product" element={<ProductPage></ProductPage>}></Route>
+        <Route
+          path="/product-detail/:slug"
+          element={<ProductDetailPage></ProductDetailPage>}
+        ></Route>
         <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
         <Route element={<DashboardLayout></DashboardLayout>}>
           <Route

@@ -77,7 +77,6 @@ const UpdateProduct = () => {
   useEffect(() => {
     getCategories();
   }, []);
-
   const handleUpdateProduct = async (values) => {
     if (!isValid) return;
     try {
@@ -85,11 +84,10 @@ const UpdateProduct = () => {
         .request({
           method: "put",
           url: `/update_product/${id}`,
-          data: values,
+          data: { ...values },
         })
         .then((data) => {
-          console.log(data);
-          toast.success("Cập nhật danh mục thành công");
+          toast.success(data.message);
           navigate("/manage/product");
         });
     } catch (error) {

@@ -31,7 +31,7 @@ const DashboardHeader = () => {
   return (
     <DashboardHeaderStyles>
       <div className="sidebar-logo">
-        <img src="../logo.svg" alt="" />
+        <img src="./logo.svg" alt="" />
       </div>
       <div className="header-avatar">
         <img
