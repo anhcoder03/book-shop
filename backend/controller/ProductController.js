@@ -155,31 +155,34 @@ class ProductController {
   }
 
   getProductAll = async (req, res, next) => {
-    let { search } = req.query;
-    const litmit = req.query.limit ? parseInt(req.query.limit) : 15;
-    if (search && search.length > 0) {
-      const query = search.replace(/['"]+/g, "");
-      let replace = `${query}`;
-      let re = new RegExp(replace, "i");
-      const data = await Product.find({ title: re });
+    let { search, page = 1 } = req.query;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    try {
+      if (search && search.length > 0) {
+        const query = search.replace(/['"]+/g, "");
+        let replace = `${query}`;
+        let re = new RegExp(replace, "i");
+        const data = await Product.find({ title: re });
+        return res.status(200).jsonp({
+          success: true,
+          message: `Thành công`,
+          data: data,
+        });
+      }
+      const data = await Product.find()
+        .skip((+page - 1) * +limit)
+        .limit(limit);
+      const totalProduct = await Product.count();
+      const totalPage = Math.ceil(totalProduct / +limit);
       return res.status(200).jsonp({
         success: true,
-        message: `Thành công`,
-        data: data,
+        message: "Good job",
+        data,
+        totalPage,
       });
+    } catch (err) {
+      res.status(400).json(`Lỗi: ${err}`);
     }
-    await Product.find()
-      .limit(litmit)
-      .then((data) => {
-        res.status(200).json({
-          success: true,
-          message: "Thành công",
-          products: data,
-        });
-      })
-      .catch((err) => {
-        res.status(400).json(`Lỗi: ${err}`);
-      });
   };
 }
 module.exports = new ProductController();

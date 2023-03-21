@@ -45,7 +45,6 @@ const AddProduct = () => {
   });
   const {
     control,
-    reset,
     setValue,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },

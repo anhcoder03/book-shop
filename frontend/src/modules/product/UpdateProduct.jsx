@@ -18,29 +18,32 @@ const FormUpdateStyles = styled.form`
   max-width: 600px;
   margin: 50px auto;
 `;
-const schema = yup.object({
-  category: yup
-    .string()
-    .required("Vui lòng phân loại danh mục!")
-    .oneOf(["sach-thieu-nhi", "sach-tieng-anh", "sach-van-hoc"]),
-  title: yup.string().required("Vui lòng nhập tên title!"),
-  author: yup.string().required("Vui lòng nhập tên author!"),
-  year: yup
-    .number("Năm phải là số")
-    .min(0, "Năm xuất bản phải lớn hơn 0")
-    .required("Vui lòng nhập năm xuất bản!"),
-  price: yup
-    .number()
-    .min(0, "Giá phải lớn hơn 0")
-    .required("Vui lòng nhập giá sản phẩm!"),
-  desc: yup.string().required("Vui lòng nhập mô tả sản phẩm!"),
-  image: yup.string().required("Vui lòng nhập ảnh sản phẩm!"),
-});
 
 const UpdateProduct = () => {
   let { id } = useParams();
   const navigate = useNavigate();
   const [listCategory, setListCategory] = useState([]);
+  let listSlugCategory = [];
+  listCategory.length > 0 &&
+    listCategory.map((item) => listSlugCategory.push(item?.slug));
+  const schema = yup.object({
+    category: yup
+      .string()
+      .required("Vui lòng phân loại danh mục!")
+      .oneOf(listSlugCategory),
+    title: yup.string().required("Vui lòng nhập tên title!"),
+    author: yup.string().required("Vui lòng nhập tên author!"),
+    year: yup
+      .number("Năm phải là số")
+      .min(0, "Năm xuất bản phải lớn hơn 0")
+      .required("Vui lòng nhập năm xuất bản!"),
+    price: yup
+      .number()
+      .min(0, "Giá phải lớn hơn 0")
+      .required("Vui lòng nhập giá sản phẩm!"),
+    desc: yup.string().required("Vui lòng nhập mô tả sản phẩm!"),
+    image: yup.string().required("Vui lòng nhập ảnh sản phẩm!"),
+  });
   const {
     control,
     reset,

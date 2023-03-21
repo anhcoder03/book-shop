@@ -6,11 +6,9 @@ import { Table } from "../../components/table";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
-import { useDispatch, useSelector } from "react-redux";
 
 const UserManage = () => {
   const [listUser, setListUser] = useState([]);
-  const user = useSelector((state) => state.auth.login?.currentUser);
   const navigate = useNavigate();
   const handleGetUsers = async () => {
     try {
@@ -18,7 +16,6 @@ const UserManage = () => {
         method: "get",
         url: "/getUsers",
       });
-
       setListUser(data);
     } catch (error) {
       toast.error("Sever error");

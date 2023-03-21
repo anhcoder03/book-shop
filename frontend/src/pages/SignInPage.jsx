@@ -10,9 +10,6 @@ import { Input } from "../components/input";
 import { Label } from "../components/label";
 import AuthenticationPage from "./AuthenticationPage";
 import { toast } from "react-toastify";
-import axiosClient from "../axios/configAxios";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { useAuth } from "../contexts/auth-context";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/apiRequest";
 

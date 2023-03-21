@@ -7,12 +7,31 @@ import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
 import { Button } from "../../components/button";
-import GetData from "../../components/common/GetData";
+import ReactPaginate from "react-paginate";
 
-const ProductManage = ({ data }) => {
-  const [listProduct, setListProduct] = useState(data.products); // Define state variable
+const ProductManage = () => {
+  const [listProduct, setListProduct] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [nextPage, setNextPage] = useState(1);
   const navigate = useNavigate();
-
+  const handlePageClick = (event) => {
+    setNextPage(event.selected + 1);
+  };
+  useEffect(() => {
+    const getProductAll = async () => {
+      try {
+        const data = await axiosClient.request({
+          method: "get",
+          url: `/getProductAll?page=${nextPage}`,
+        });
+        setListProduct(data.data);
+        setPageCount(Math.ceil(data.totalPage));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getProductAll();
+  }, [nextPage]);
   const handleDeleteProduct = (id) => {
     Swal.fire({
       title: "Bạn muốn sản phẩm này?",
@@ -97,8 +116,30 @@ const ProductManage = ({ data }) => {
             ))}
         </tbody>
       </Table>
+      <div className="pb-10">
+        <ReactPaginate
+          hrefBuilder={() => {
+            return "#";
+          }}
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={2}
+          pageCount={pageCount}
+          disableInitialCallback={true}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          className="mb-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-[6px] text-[15px] text-[#ececec] lg:gap-x-3 lg:text-base lg:mb-0 "
+          pageLinkClassName="bg-[#33292E] bg-opacity-80 page-link transition-all hover:bg-opacity-100 py-1 px-2 rounded-[5px]"
+          previousClassName="bg-[#33292E] bg-opacity-80  transition-all hover:bg-opacity-100 py-1 px-2 rounded-[5px]"
+          nextClassName="bg-[#33292E] nextPage bg-opacity-80  transition-all hover:bg-opacity-100 py-1 px-2 rounded-[5px]"
+          activeClassName="page-active text-primary"
+          disabledClassName="opacity-40"
+          disabledLinkClassName="hover:cursor-default"
+        />
+      </div>
     </div>
   );
 };
 
-export default GetData(ProductManage, "/getProductAll");
+export default ProductManage;
