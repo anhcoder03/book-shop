@@ -29,6 +29,7 @@ const MenuStyles = styled.ul`
   align-items: center;
   justify-content: center;
   padding: 20px 0;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   .menu-wrapper {
     display: flex;
     align-items: center;

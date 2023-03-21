@@ -1,34 +1,40 @@
-const authRouter = require("./authRouter");
-const categoryRouter = require("./categoryRouter");
-const productRouter = require("./productRouter");
+const express = require("express");
+const route = express.Router();
+const userController = require("../controller/AuthController");
+const CategoryController = require("../controller/CategoryController");
+const ProductController = require("../controller/ProductController");
+const { verifyTokenAdmin, verifyToken } = require("../middleware/auth");
 
 function router(app) {
   //auth
-  app.post("/register", authRouter);
-  app.get("/getUsers", authRouter);
-  app.get("/getUser/:id", authRouter);
-  app.post("/login", authRouter);
-  app.put("/updateUser/:id", authRouter);
-  app.delete("/deleteUser/:id", authRouter);
-  app.post("/refreshToken", authRouter);
-  app.post("/logout", authRouter);
+  route.post("/register", userController.register);
+  route.get("/getUsers", userController.getUsers);
+  route.get("/getUser/:id", userController.getUser);
+  route.post("/login", userController.login);
+  route.put("/updateUser/:id", verifyTokenAdmin, userController.updateUser);
+  route.delete("/deleteUser/:id", verifyTokenAdmin, userController.deleteUser);
+  route.post("/refreshToken", userController.createNewRefreshToken);
+  route.post("/logout", verifyToken, userController.logout);
 
   //category
 
-  app.post("/create_category", categoryRouter);
-  app.put("/update_category/:id", categoryRouter);
-  app.delete("/delete_category/:id", categoryRouter);
-  app.get("/get_category_all", categoryRouter);
-  app.get("/get_category/:id", categoryRouter);
+  route.post("/create_category", CategoryController.createCate);
+  route.put("/update_category/:id", CategoryController.updateCate);
+  route.delete("/delete_category/:id", CategoryController.deleteCate);
+  route.get("/get_category_all", CategoryController.getCateAll);
+  route.get("/get_category/:id", CategoryController.getCateById);
 
   //product
-
-  app.post("/create_product", productRouter);
-  app.get("/getProductAll", productRouter);
-  app.get("/getProduct/:id", productRouter);
-  app.put("/update_product/:id", productRouter);
-  app.delete("/delete_product/:id", productRouter);
-  app.get("/product_of_category/:category", productRouter);
+  route.post("/create_product", ProductController.createProduct);
+  route.put("/update_product/:id", ProductController.updateProduct);
+  route.get("/getProductAll", ProductController.getProductAll);
+  route.get("/getProduct/:slug", ProductController.getProduct);
+  route.delete("/delete_product/:id", ProductController.deleteProduct);
+  route.get(
+    "/product_of_category/:category",
+    ProductController.getProductByCategory
+  );
+  return app.use(route);
 }
 
 module.exports = router;

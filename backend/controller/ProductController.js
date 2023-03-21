@@ -137,8 +137,8 @@ class ProductController {
   //     });
   // }
   getProduct(req, res, next) {
-    const id = req.params.id;
-    Product.findById(id)
+    const slug = req.params.slug;
+    Product.findOne({ slug: slug })
       .then((data) => {
         res.status(200).json({
           success: true,
@@ -155,7 +155,7 @@ class ProductController {
   }
 
   getProductAll = async (req, res, next) => {
-    let { search, page = 1 } = req.query;
+    let { search, page = 1, category = null } = req.query;
     const limit = req.query.limit ? parseInt(req.query.limit) : 10;
     try {
       if (search && search.length > 0) {
@@ -169,10 +169,10 @@ class ProductController {
           data: data,
         });
       }
-      const data = await Product.find()
+      const data = await Product.find(category && { category })
         .skip((+page - 1) * +limit)
         .limit(limit);
-      const totalProduct = await Product.count();
+      const totalProduct = await Product.count(category && { category });
       const totalPage = Math.ceil(totalProduct / +limit);
       return res.status(200).jsonp({
         success: true,
