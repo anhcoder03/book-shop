@@ -2,6 +2,7 @@ const express = require("express");
 const route = express.Router();
 const userController = require("../controller/AuthController");
 const CategoryController = require("../controller/CategoryController");
+const CommentController = require("../controller/CommentController");
 const ProductController = require("../controller/ProductController");
 const { verifyTokenAdmin, verifyToken } = require("../middleware/auth");
 
@@ -35,6 +36,9 @@ function router(app) {
     "/product_of_category/:category",
     ProductController.getProductByCategory
   );
+
+  route.post("/addComment", CommentController.addComment);
+  route.get("/getCommentAll/:productId", CommentController.getCommentAll);
   return app.use(route);
 }
 

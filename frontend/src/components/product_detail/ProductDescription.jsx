@@ -1,0 +1,30 @@
+import React from "react";
+import styled from "styled-components";
+
+const DescriptionStyle = styled.div`
+  padding: 30px;
+  margin-top: 30px;
+  border-radius: 12px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  .description-heading {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .desc-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
+`;
+function ProductDescription({ title, desc }) {
+  return (
+    <DescriptionStyle>
+      <h1 className="description-heading">Mô tả</h1>
+      <p className="desc-title">{title}</p>
+      <p>{desc}</p>
+    </DescriptionStyle>
+  );
+}
+
+export default ProductDescription;

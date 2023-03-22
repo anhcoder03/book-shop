@@ -145,7 +145,7 @@ const Header = () => {
       <div className="container">
         <div className="header-main">
           <NavLink href="/">
-            <img src="logo.svg" alt="" className="logo" />
+            <img src="../logo.svg" alt="" className="logo" />
           </NavLink>
           <InputSearch></InputSearch>
           <div className="header-right">
