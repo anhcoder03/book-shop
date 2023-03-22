@@ -7,7 +7,7 @@ const User = new Schema(
     username: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
-    avatar: {
+    image: {
       type: String,
       default:
         "https://images.unsplash.com/photo-1678720131679-14475f693cd6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",

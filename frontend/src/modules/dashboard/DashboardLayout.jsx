@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import { useAuth } from "../../contexts/auth-context";
 import DashboardHeader from "./DashboardHeader";
 import Sidebar from "./Sidebar";
 const DashboardStyles = styled.div`

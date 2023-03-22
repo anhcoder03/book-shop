@@ -116,7 +116,7 @@ class UserController {
         const user = {
           fullname: formData.fullname,
           username: formData.username,
-          avatar: formData.avatar,
+          image: formData.image,
         };
         User.updateOne({ _id: id }, user)
           .then(() =>
@@ -125,7 +125,9 @@ class UserController {
             })
           )
           .catch((err) => {
-            res.status(400).json(err);
+            res.status(400).json({
+              message: "Cập nhật thất bại",
+            });
           });
       })
       .catch((err) => {

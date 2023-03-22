@@ -153,6 +153,23 @@ class ProductController {
         });
       });
   }
+  getProductById(req, res, next) {
+    const id = req.params.id;
+    Product.findOne({ _id: id })
+      .then((data) => {
+        res.status(200).json({
+          success: true,
+          message: "Thành công",
+          data: data,
+        });
+      })
+      .catch((err) => {
+        res.status(400).json({
+          success: false,
+          message: `Lỗi : ${err}`,
+        });
+      });
+  }
 
   getProductAll = async (req, res, next) => {
     let { search, page = 1, category = null } = req.query;

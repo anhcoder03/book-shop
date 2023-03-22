@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { AuthProvider, useAuth } from "./contexts/auth-context";
+import { AuthProvider } from "./context/auth-context";
 import AddCategory from "./modules/category/AddCategory";
 import CategoryManage from "./modules/category/CategoryManage";
 import UpdateCategory from "./modules/category/UpdateCategory";
@@ -16,6 +16,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import ProductPage from "./pages/ProductPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="sign-up" element={<SignUpPage></SignUpPage>}></Route>
         <Route path="sign-in" element={<SignInPage></SignInPage>}></Route>
         <Route path="/product" element={<ProductPage></ProductPage>}></Route>
+        <Route path="/profile" element={<UserProfile></UserProfile>}></Route>
         <Route
           path="/product-detail/:slug"
           element={<ProductDetailPage></ProductDetailPage>}

@@ -163,13 +163,15 @@ const Header = () => {
                         setShow(!show);
                       }}
                     >
-                      <img src={user.avatar} className="user-avatar" alt="" />
+                      <img src={user.image} className="user-avatar" alt="" />
                       {user.fullname}
                     </span>
                   </div>
                   <div className={`action-user ${show ? "show" : ""}`}>
                     <p onClick={handleSignOut}>Đăng xuất</p>
-                    <p>Cập nhật tài khoản</p>
+                    <p onClick={() => navigate("/profile")}>
+                      Cập nhật tài khoản
+                    </p>
                     {user?.admin === true ? (
                       <p onClick={() => navigate("/dashboard")}>Dashboard</p>
                     ) : null}

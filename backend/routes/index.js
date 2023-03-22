@@ -11,7 +11,7 @@ function router(app) {
   route.get("/getUsers", userController.getUsers);
   route.get("/getUser/:id", userController.getUser);
   route.post("/login", userController.login);
-  route.put("/updateUser/:id", verifyTokenAdmin, userController.updateUser);
+  route.put("/updateUser/:id", verifyToken, userController.updateUser);
   route.delete("/deleteUser/:id", verifyTokenAdmin, userController.deleteUser);
   route.post("/refreshToken", userController.createNewRefreshToken);
   route.post("/logout", verifyToken, userController.logout);
@@ -29,6 +29,7 @@ function router(app) {
   route.put("/update_product/:id", ProductController.updateProduct);
   route.get("/getProductAll", ProductController.getProductAll);
   route.get("/getProduct/:slug", ProductController.getProduct);
+  route.get("/getProductById/:id", ProductController.getProductById);
   route.delete("/delete_product/:id", ProductController.deleteProduct);
   route.get(
     "/product_of_category/:category",

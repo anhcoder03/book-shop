@@ -6,9 +6,13 @@ import { Table } from "../../components/table";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import Swal from "sweetalert2";
 import { ActionDelete, ActionEdit } from "../../drafts/action";
+import { useSelector } from "react-redux";
 
 const UserManage = () => {
   const [listUser, setListUser] = useState([]);
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const accessToken = user?.accessToken;
+
   const navigate = useNavigate();
   const handleGetUsers = async () => {
     try {
@@ -40,8 +44,12 @@ const UserManage = () => {
           axiosClient.request({
             method: "delete",
             url: `/deleteUser/${id}`,
+            headers: {
+              token: `Bearer ${accessToken}`,
+            },
           });
-          handleGetUsers();
+          const updatedList = listUser.filter((item) => item._id !== id); // Filter out deleted product from list
+          setListUser(updatedList);
           Swal.fire("Deleted!", "Your file has been deleted.", "success");
         } catch (err) {
           toast.error("Đã xẩy ra lỗi");
@@ -76,7 +84,7 @@ const UserManage = () => {
                 <td>
                   <div className="flex items-center gap-x-3">
                     <img
-                      src={item.avatar}
+                      src={item.image}
                       alt=""
                       className="w-[66px] h-[55px] rounded object-cover"
                     />

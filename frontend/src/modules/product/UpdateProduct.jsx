@@ -12,10 +12,12 @@ import { Button } from "../../components/button";
 import { toast } from "react-toastify";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import DropdownCategory from "../../drafts/DropdownCategory";
+import ImageUpload from "../../components/image/ImageUpload";
+import useFirebaseImage from "../../hooks/useFirebaseImage";
 
 const FormUpdateStyles = styled.form`
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   margin: 50px auto;
 `;
 
@@ -49,18 +51,22 @@ const UpdateProduct = () => {
     reset,
     setValue,
     handleSubmit,
+    getValues,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
+  const { image, setImage, progress, handleSelectImage, handleDeleteImage } =
+    useFirebaseImage(setValue, getValues);
   useEffect(() => {
     const handleGetUser = async () => {
       const data = await axiosClient.request({
         method: "get",
-        url: `getProduct/${id}`,
+        url: `getProductById/${id}`,
       });
       reset(data.data);
+      setImage(data.data.image);
     };
     handleGetUser();
   }, [id]);
@@ -87,7 +93,7 @@ const UpdateProduct = () => {
         .request({
           method: "put",
           url: `/update_product/${id}`,
-          data: { ...values },
+          data: { ...values, image },
         })
         .then((data) => {
           toast.success(data.message);
@@ -122,41 +128,55 @@ const UpdateProduct = () => {
             dropdownLabel="Phân loại danh mục"
           ></DropdownCategory>
         </Field>
+        <div className="form-layout">
+          <Field>
+            <Label htmlFor="title">Title</Label>
+            <Input
+              type="text"
+              name="title"
+              placeholder="Please enter you tilte"
+              control={control}
+            ></Input>
+          </Field>
+          <Field>
+            <Label htmlFor="author">Author</Label>
+            <Input
+              type="text"
+              name="author"
+              placeholder="Please enter you author"
+              control={control}
+            ></Input>
+          </Field>
+        </div>
+        <div className="form-layout">
+          <Field>
+            <Label htmlFor="year">Năm xuất bản</Label>
+            <Input
+              type="number"
+              name="year"
+              placeholder="Please enter you year"
+              control={control}
+            ></Input>
+          </Field>
+          <Field>
+            <Label htmlFor="price">Giá</Label>
+            <Input
+              type="number"
+              name="price"
+              placeholder="Please enter you price"
+              control={control}
+            ></Input>
+          </Field>
+        </div>
         <Field>
-          <Label htmlFor="title">Title</Label>
-          <Input
-            type="text"
-            name="title"
-            placeholder="Please enter you tilte"
-            control={control}
-          ></Input>
-        </Field>
-        <Field>
-          <Label htmlFor="author">Author</Label>
-          <Input
-            type="text"
-            name="author"
-            placeholder="Please enter you author"
-            control={control}
-          ></Input>
-        </Field>
-        <Field>
-          <Label htmlFor="year">Năm xuất bản</Label>
-          <Input
-            type="number"
-            name="year"
-            placeholder="Please enter you year"
-            control={control}
-          ></Input>
-        </Field>
-        <Field>
-          <Label htmlFor="price">Giá</Label>
-          <Input
-            type="number"
-            name="price"
-            placeholder="Please enter you price"
-            control={control}
-          ></Input>
+          <Label>Image</Label>
+          <ImageUpload
+            onChange={handleSelectImage}
+            handleDeleteImage={handleDeleteImage}
+            className="h-[250px]"
+            progress={progress}
+            image={image}
+          ></ImageUpload>
         </Field>
         <Field>
           <Label htmlFor="desc">Mô tả</Label>
@@ -167,15 +187,7 @@ const UpdateProduct = () => {
             control={control}
           ></Input>
         </Field>
-        <Field>
-          <Label htmlFor="image">Ảnh sản phẩm</Label>
-          <Input
-            type="text"
-            name="image"
-            placeholder="Please enter you image"
-            control={control}
-          ></Input>
-        </Field>
+
         <Button
           type="submit"
           style={{

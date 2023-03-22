@@ -12,6 +12,8 @@ import { Button } from "../../components/button";
 import { toast } from "react-toastify";
 import DashboardHeading from "../../drafts/DashboardHeading";
 import { useSelector } from "react-redux";
+import ImageUpload from "../../components/image/ImageUpload";
+import useFirebaseImage from "../../hooks/useFirebaseImage";
 
 const FormUpdateStyles = styled.form`
   width: 100%;
@@ -21,7 +23,7 @@ const FormUpdateStyles = styled.form`
 const schema = yup.object({
   fullname: yup.string().required("Please enter your fullname"),
   username: yup.string().required("Please enter your username"),
-  avatar: yup.string().required("Please enter your avatar"),
+  image: yup.string().required("Please enter your avatar"),
   email: yup
     .string()
     .email("Please enter valid email address")
@@ -36,12 +38,16 @@ const UpdateUserManage = () => {
   const {
     control,
     reset,
+    setValue,
+    getValues,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
+  const { image, setImage, progress, handleSelectImage, handleDeleteImage } =
+    useFirebaseImage(setValue, getValues);
   useEffect(() => {
     const handleGetUser = async () => {
       const data = await axiosClient.request({
@@ -49,6 +55,7 @@ const UpdateUserManage = () => {
         url: `getUser/${id}`,
       });
       reset(data);
+      setImage(data.image);
     };
     handleGetUser();
   }, [id]);
@@ -59,7 +66,7 @@ const UpdateUserManage = () => {
         .request({
           method: "put",
           url: `/updateUser/${id}`,
-          data: values,
+          data: { ...values, image },
           headers: {
             token: `Bearer ${accessToken}`,
           },
@@ -103,23 +110,16 @@ const UpdateUserManage = () => {
             disabled
           ></Input>
         </Field>
-        {/* <Field>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            type="text"
-            name="password"
-            placeholder="Please enter you password"
-            control={control}
-          ></Input>
-        </Field> */}
         <Field>
-          <Label htmlFor="avatar">Avatar</Label>
-          <Input
-            type="text"
-            name="avatar"
-            placeholder="Please enter you avatar"
-            control={control}
-          ></Input>
+          <Label htmlFor="image">Ảnh sản phẩm</Label>
+          <div className="w-[200px] h-[200px] mx-auto rounded-full mb-10 overflow-hidden">
+            <ImageUpload
+              onChange={handleSelectImage}
+              progress={progress}
+              image={image}
+              handleDeleteImage={handleDeleteImage}
+            ></ImageUpload>
+          </div>
         </Field>
         <Field>
           <Label htmlFor="email">Email</Label>
