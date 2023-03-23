@@ -14,6 +14,8 @@ import DashboardHeading from "../../drafts/DashboardHeading";
 import DropdownCategory from "../../drafts/DropdownCategory";
 import ImageUpload from "../../components/image/ImageUpload";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const FormUpdateStyles = styled.form`
   width: 100%;
@@ -38,13 +40,13 @@ const AddProduct = () => {
       .number("Năm phải là số")
       .min(0, "Năm xuất bản phải lớn hơn 0")
       .required("Vui lòng nhập năm xuất bản!"),
+    image: yup.string().required("Vui lòng chọn ảnh!"),
     price: yup
       .number()
       .min(0, "Giá phải lớn hơn 0")
       .required("Vui lòng nhập giá sản phẩm!"),
-    image: yup.string().required("Vui lòng chọn ảnh!"),
-    desc: yup.string().required("Vui lòng nhập mô tả sản phẩm!"),
   });
+  const [desc, setDesc] = useState("");
   const {
     control,
     setValue,
@@ -73,14 +75,12 @@ const AddProduct = () => {
 
   const handleCreateProduct = async (values) => {
     const cloneValue = { ...values };
-    console.log(cloneValue);
-    if (!isValid) return;
     try {
       await axiosClient
         .request({
           method: "post",
           url: `/create_product`,
-          data: { ...cloneValue, image },
+          data: { ...cloneValue, image, desc },
         })
         .then((data) => {
           toast.success("Thêm sản phẩm thành công");
@@ -92,7 +92,6 @@ const AddProduct = () => {
       toast.error(message);
     }
   };
-
   const { image, progress, handleDeleteImage, handleSelectImage } =
     useFirebaseImage(setValue, getValues);
   useEffect(() => {
@@ -103,7 +102,7 @@ const AddProduct = () => {
   }, [errors]);
   return (
     <div>
-      <DashboardHeading title="Update User"></DashboardHeading>
+      <DashboardHeading title="Thêm sản phẩm"></DashboardHeading>
       <FormUpdateStyles
         className="form"
         onSubmit={handleSubmit(handleCreateProduct)}
@@ -170,12 +169,9 @@ const AddProduct = () => {
         </Field>
         <Field>
           <Label htmlFor="desc">Mô tả</Label>
-          <Input
-            type="text"
-            name="desc"
-            placeholder="Please enter you description"
-            control={control}
-          ></Input>
+          <div className="w-full entry-content">
+            <ReactQuill theme="snow" value={desc} onChange={setDesc} />
+          </div>
         </Field>
         <Button
           type="submit"

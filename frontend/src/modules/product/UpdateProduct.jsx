@@ -14,6 +14,8 @@ import DashboardHeading from "../../drafts/DashboardHeading";
 import DropdownCategory from "../../drafts/DropdownCategory";
 import ImageUpload from "../../components/image/ImageUpload";
 import useFirebaseImage from "../../hooks/useFirebaseImage";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const FormUpdateStyles = styled.form`
   width: 100%;
@@ -25,6 +27,7 @@ const UpdateProduct = () => {
   let { id } = useParams();
   const navigate = useNavigate();
   const [listCategory, setListCategory] = useState([]);
+  const [desc, setDesc] = useState("");
   let listSlugCategory = [];
   listCategory.length > 0 &&
     listCategory.map((item) => listSlugCategory.push(item?.slug));
@@ -67,6 +70,7 @@ const UpdateProduct = () => {
       });
       reset(data.data);
       setImage(data.data.image);
+      setDesc(data.data.desc);
     };
     handleGetUser();
   }, [id]);
@@ -93,7 +97,7 @@ const UpdateProduct = () => {
         .request({
           method: "put",
           url: `/update_product/${id}`,
-          data: { ...values, image },
+          data: { ...values, image, desc },
         })
         .then((data) => {
           toast.success(data.message);
@@ -180,12 +184,9 @@ const UpdateProduct = () => {
         </Field>
         <Field>
           <Label htmlFor="desc">Mô tả</Label>
-          <Input
-            type="text"
-            name="desc"
-            placeholder="Please enter you description"
-            control={control}
-          ></Input>
+          <div className="w-full entry-content">
+            <ReactQuill theme="snow" value={desc} onChange={setDesc} />
+          </div>
         </Field>
 
         <Button

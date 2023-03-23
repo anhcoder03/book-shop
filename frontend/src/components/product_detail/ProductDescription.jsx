@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import parse from "html-react-parser";
 
 const DescriptionStyle = styled.div`
   padding: 30px;
@@ -17,12 +18,11 @@ const DescriptionStyle = styled.div`
     margin-bottom: 30px;
   }
 `;
-function ProductDescription({ title, desc }) {
+function ProductDescription({ desc }) {
   return (
     <DescriptionStyle>
       <h1 className="description-heading">Mô tả</h1>
-      <p className="desc-title">{title}</p>
-      <p>{desc}</p>
+      <div className="entry-content">{parse(desc || "")}</div>
     </DescriptionStyle>
   );
 }
