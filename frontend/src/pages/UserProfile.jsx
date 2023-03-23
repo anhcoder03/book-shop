@@ -93,7 +93,7 @@ function UserProfile() {
         >
           <Field>
             <Label htmlFor="image">Ảnh đại diện</Label>
-            <div className="w-[300px] h-[200px] mx-auto rounded-full mb-10 overflow-hidden">
+            <div className="w-[300px] h-[300px] mx-auto rounded-full mb-10 overflow-hidden">
               <ImageUpload
                 onChange={handleSelectImage}
                 progress={progress}

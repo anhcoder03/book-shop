@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../axios/configAxios";
+import CardSkeleton from "./CardSkeleton";
 
 const GetData = (Component, url) => {
   return (props) => {
@@ -18,7 +19,16 @@ const GetData = (Component, url) => {
         console.log(err);
       }
     }, []);
-    if (!listData || listData.length === 0) return <div>Loading...</div>;
+    if (!listData || listData.length === 0)
+      return (
+        <div className=" grid grid-cols-2 lg:grid-cols-5 gap-3">
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+        </div>
+      );
     return <Component data={listData} {...props}></Component>;
   };
 };

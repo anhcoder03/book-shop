@@ -115,9 +115,9 @@ const HeaderStyles = styled.header`
 const Header = () => {
   const { show, setShow, nodeRef } = useClickOutSide(".action-user");
   const user = useSelector((state) => state.auth.login?.currentUser);
+  const accessToken = user?.accessToken;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const accessToken = user?.accessToken;
   const handleSignOut = () => {
     logout(dispatch, navigate, accessToken);
     toast.success("Đăng xuất thành công!");
@@ -144,7 +144,7 @@ const Header = () => {
     <HeaderStyles ref={HeadRef}>
       <div className="container">
         <div className="header-main">
-          <NavLink href="/">
+          <NavLink to="/">
             <img src="../logo.svg" alt="" className="logo" />
           </NavLink>
           <InputSearch></InputSearch>

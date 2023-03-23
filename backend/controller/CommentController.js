@@ -2,8 +2,8 @@ const Comment = require("../models/Comment");
 
 class CommentController {
   addComment = (req, res) => {
-    const { userId, productId } = req.body;
-    Comment.findOne({ productId: productId, userId: userId })
+    const { username, productId } = req.body;
+    Comment.findOne({ productId: productId, username: username })
       .then((data) => {
         if (data) {
           res.status(400).json({

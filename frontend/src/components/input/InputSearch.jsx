@@ -6,6 +6,13 @@ import { useDebounce } from "../../hooks/useDebounce";
 import useClickOutSide from "../../hooks/useClickOutSide";
 import styled from "styled-components";
 import { IconSearch } from "../icon";
+import ResultSearch from "../search/ResultSearch";
+
+const SearchWrapper = styled.div`
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+`;
 
 const SearchStyles = styled.div`
   display: flex;
@@ -14,7 +21,6 @@ const SearchStyles = styled.div`
   border: 1px solid #eee;
   border-radius: 20px;
   width: 100%;
-  max-width: 500px;
   position: relative;
   .search-input {
     flex: 1;
@@ -46,21 +52,17 @@ const InputSearch = () => {
   const handleInputChange = (e) => {
     setSearchValue(e.target.value);
   };
-  // const handleClearValue = () => {
-  //   setSearchValue("");
-  // };
   useEffect(() => {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     const handleFetchProduct = async () => {
       setIsLoading(true);
       setShow(true);
-      let start = new Date();
       try {
         const data = await axiosClient.request({
           method: "get",
           url: `/getProductAll?search=${debouncedSearchTerm}`,
         });
-        setListProduct(data);
+        setListProduct(data.data);
       } catch (error) {
         toast.error("Sever error");
       }
@@ -77,28 +79,25 @@ const InputSearch = () => {
     } else {
       setListProduct([]);
     }
-  }, [debouncedSearchTerm, setShow]);
-  console.log(listProduct);
+  }, [debouncedSearchTerm]);
   return (
-    <SearchStyles>
-      <input
-        ref={nodeRef}
-        onClick={() => {
-          setShow(!show);
-        }}
-        value={searchValue}
-        onChange={handleInputChange}
-        type="text"
-        className="search-input"
-        placeholder="Tìm kiếm sách..."
-      />
-      <IconSearch className="search-icon"></IconSearch>
-
-      {/* <div className="flex items-center flex-1 w-full text-sm border-b-2 border-gray-300 div-search search-header">
-        {searchValue && <IconClose onClick={handleClearValue} />}
-      </div> */}
-      {/* <List data={listProduct} loading={isLoading} show={show}></List> */}
-    </SearchStyles>
+    <SearchWrapper>
+      <SearchStyles>
+        <input
+          ref={nodeRef}
+          onClick={() => {
+            setShow(!show);
+          }}
+          value={searchValue}
+          onChange={handleInputChange}
+          type="text"
+          className="search-input"
+          placeholder="Tìm kiếm sách..."
+        />
+        <IconSearch className="search-icon"></IconSearch>
+      </SearchStyles>
+      <ResultSearch data={listProduct} show={show}></ResultSearch>
+    </SearchWrapper>
   );
 };
 InputSearch.propTypes = {
