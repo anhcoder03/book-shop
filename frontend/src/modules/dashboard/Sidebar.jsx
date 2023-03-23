@@ -39,6 +39,11 @@ const sidebarLinks = [
     icon: <i className="fa-solid fa-list-check"></i>,
   },
   {
+    title: "Comment",
+    url: "/manage/commemt",
+    icon: <i className="fa-solid fa-comment"></i>,
+  },
+  {
     title: "User",
     url: "/manage/user",
     icon: <i className="fa-regular fa-user"></i>,

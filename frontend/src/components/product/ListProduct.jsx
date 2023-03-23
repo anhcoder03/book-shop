@@ -1,7 +1,9 @@
+import { set } from "lodash";
 import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import axiosClient from "../../axios/configAxios";
+import CardSkeleton from "../common/CardSkeleton";
 import ProductItem from "../common/ProductItem";
 
 const ListProductStyles = styled.div`
@@ -32,9 +34,9 @@ const ProductContentStyles = styled.div`
 const ListProduct = () => {
   const [listCategory, setListCategory] = useState([]);
   const [listProduct, setListProduct] = useState([]);
-  // const [nextPage, setNextPage] = useState(1);
   const [title, setTitle] = useState("Tất cả sản phẩm");
   const [pageCount, setPageCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [url, setUrl] = useState(`/getProductAll`);
   const handleGetCategory = async () => {
     const response = await axiosClient({
@@ -53,11 +55,13 @@ const ListProduct = () => {
   };
   useEffect(() => {
     const handleGetProductAll = async () => {
+      setLoading(true);
       const response = await axiosClient.request({
         method: "get",
         url: url,
       });
       setListProduct(response.data);
+      setLoading(false);
       setPageCount(Math.ceil(response.totalPage));
     };
     handleGetProductAll();
@@ -67,6 +71,15 @@ const ListProduct = () => {
     <ProductContentStyles>
       <CategoryStyles>
         <h3 className="category-title">Danh mục sản phẩm</h3>
+        {loading && (
+          <div className=" grid grid-cols-2 lg:grid-cols-5 gap-3">
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+          </div>
+        )}
         <div className="category-list">
           {listCategory.length > 0 &&
             listCategory.map((category) => (

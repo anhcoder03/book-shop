@@ -37,7 +37,7 @@ function router(app) {
     ProductController.getProductByCategory
   );
 
-  route.post("/addComment", CommentController.addComment);
+  route.post("/addComment", verifyToken, CommentController.addComment);
   route.get("/getCommentAll/:productId", CommentController.getCommentAll);
   return app.use(route);
 }

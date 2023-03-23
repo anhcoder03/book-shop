@@ -83,6 +83,9 @@ function ProductDetailPage() {
           method: "post",
           url: `/addComment`,
           data: { ...values, username, productId, userImage },
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
         })
         .then(() => {
           toast.success("Bình luận sản phẩm thành công");
