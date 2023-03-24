@@ -40,7 +40,7 @@ const sidebarLinks = [
   },
   {
     title: "Comment",
-    url: "/manage/commemt",
+    url: "/manage/comment",
     icon: <i className="fa-solid fa-comment"></i>,
   },
   {

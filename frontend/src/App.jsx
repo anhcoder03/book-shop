@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/auth-context";
 import AddCategory from "./modules/category/AddCategory";
 import CategoryManage from "./modules/category/CategoryManage";
 import UpdateCategory from "./modules/category/UpdateCategory";
+import ManageComment from "./modules/comment/ManageComment";
 import DashboardLayout from "./modules/dashboard/DashboardLayout";
 import AddProduct from "./modules/product/AddProduct";
 import ProductManage from "./modules/product/ProductManage";
@@ -69,6 +70,12 @@ function App() {
           ></Route>
         </Route>
 
+        <Route element={<DashboardLayout></DashboardLayout>}>
+          <Route
+            path="/manage/comment"
+            element={<ManageComment></ManageComment>}
+          ></Route>
+        </Route>
         <Route element={<DashboardLayout></DashboardLayout>}>
           <Route
             path="/manage/product"

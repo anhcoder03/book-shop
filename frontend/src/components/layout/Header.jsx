@@ -151,7 +151,7 @@ const Header = () => {
           <div className="header-right">
             <div className="login">
               {!user ? (
-                <NavLink to={"sign-in"} className="nav-link">
+                <NavLink to={"/sign-in"} className="nav-link">
                   Đăng nhập <i className="fa-solid fa-user"></i>
                 </NavLink>
               ) : (
