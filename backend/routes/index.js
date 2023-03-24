@@ -15,7 +15,7 @@ function router(app) {
   route.put("/updateUser/:id", verifyToken, userController.updateUser);
   route.delete("/deleteUser/:id", verifyTokenAdmin, userController.deleteUser);
   route.post("/refreshToken", userController.createNewRefreshToken);
-  route.post("/logout", verifyToken, userController.logout);
+  route.post("/logout", userController.logout);
 
   //category
 

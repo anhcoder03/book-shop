@@ -1,13 +1,25 @@
-const StarRating = ({ rating }) => {
+const StarRating = ({ rating, textSm = false }) => {
   const stars = [];
-  console.log(rating);
+  const paserRating = Math.round(rating);
   for (let i = 0; i < 5; i++) {
-    if (i < rating) {
+    if (i < paserRating) {
       stars.push(
-        <i class="fa-sharp fa-solid fa-star text-base text-primary"></i>
+        <i
+          key={i}
+          className={`fa-sharp fa-solid fa-star ${
+            textSm ? "text-xs" : "text-base"
+          }  text-primary`}
+        ></i>
       );
     } else {
-      stars.push(<span className=" text-2xl text-primary">☆</span>);
+      stars.push(
+        <span
+          key={i}
+          className={`${textSm ? "text-xl" : "text-2xl"}  text-primary`}
+        >
+          ☆
+        </span>
+      );
     }
   }
   return <>{stars}</>;

@@ -63,7 +63,18 @@ function ProductDetailPage() {
     };
     handleGetProduct();
   }, [slug]);
-  const { _id, image, title, price, year, desc, author } = product;
+  const {
+    _id,
+    image,
+    title,
+    price,
+    year,
+    desc,
+    author,
+    average_score,
+    review_count,
+  } = product;
+  console.log(product);
   const productId = _id;
   useEffect(() => {
     const handleGetComment = async () => {
@@ -113,19 +124,21 @@ function ProductDetailPage() {
           author={author}
           year={year}
           price={price}
+          averageScore={average_score}
+          reviewCount={review_count}
         ></ProductDetailMain>
         <ProductDescription title={title} desc={desc}></ProductDescription>
         <CommentStyles className="comment-wrraper">
           <h1 className="text-3xl font-bold">Đánh giá</h1>
           <div className="listComment mt-8">
-            {listComment.length > 0 &&
+            {listComment.length > 0 ? (
               listComment.map((item) => (
                 <div key={item._id} className="mb-4">
                   <div className="flex gap-x-4 items-center">
                     <img
                       src={item?.userImage}
                       className="w-[40px] h-[40px] rounded-full object-cover"
-                      alt=""
+                      alt={item.title}
                     />
                     <div className="">
                       <p className="font-medium">{item.username}</p>
@@ -142,7 +155,12 @@ function ProductDetailPage() {
                     <span className="text-sm">{item.review}</span>
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <p className="text-center text-primary">
+                Chưa có đánh giá nào cho sản phẩm này.
+              </p>
+            )}
           </div>
           {!user ? (
             <div>
@@ -169,7 +187,7 @@ function ProductDetailPage() {
               </h1>
               <div className="rating mt-5 ">
                 <h3 className="font-semibold text-[#666]">Đánh giá sao *</h3>
-                <span class="flex gap-x-1">
+                <span className="flex gap-x-1">
                   <Radio
                     name="rating"
                     control={control}

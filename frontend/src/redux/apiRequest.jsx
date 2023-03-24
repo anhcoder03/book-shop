@@ -36,29 +36,3 @@ export const logout = async (dispatch, navigate, accessToken) => {
     dispatch(logoutFailed());
   }
 };
-
-// export const getUserAll = async (accessToken, dispatch) => {
-//   dispatch(getUserStart());
-//   try {
-//     const res = await axios.get("http://localhost:8080/getUsers", {
-//       headers: {
-//         token: `Bearer ${accessToken}`,
-//       },
-//     });
-//     dispatch(getUserSuccess(res.data));
-//   } catch (err) {
-//     dispatch(getUserFailed());
-//   }
-// };
-
-// export const deleteUser = async (accessToken, dispatch, id) => {
-//   dispatch(deleteUserStart());
-//   try {
-//     const res = await axios.delete(`http://localhost:8080/deleteUser/${id}`, {
-//       headers: { token: `Bearer ${accessToken}` },
-//     });
-//     dispatch(delteUserSuccess(res.data));
-//   } catch (err) {
-//     dispatch(deleteUserFailed(err.response.data));
-//   }
-// };

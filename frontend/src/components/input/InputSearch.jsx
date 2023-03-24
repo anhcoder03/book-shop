@@ -57,6 +57,7 @@ const InputSearch = () => {
     const handleFetchProduct = async () => {
       setIsLoading(true);
       setShow(true);
+      let start = new Date();
       try {
         const data = await axiosClient.request({
           method: "get",

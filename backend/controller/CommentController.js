@@ -1,4 +1,5 @@
 const Comment = require("../models/Comment");
+const Product = require("../models/Product");
 
 class CommentController {
   addComment = (req, res) => {
@@ -14,13 +15,25 @@ class CommentController {
           return Comment.create(req.body);
         }
       })
-      .then((data) =>
+      .then((data) => {
+        Comment.find({ productId: productId }).then((data) => {
+          const totalScore = data.reduce(
+            (sum, comment) => sum + comment.rating,
+            0
+          );
+          const reviewCount = data.length;
+          const averageScore = totalScore / reviewCount;
+          Product.findOne({ _id: productId }).then((data) => {
+            data.review_count = reviewCount;
+            data.average_score = averageScore;
+            return data.save();
+          });
+        });
         res.status(200).json({
-          success: true,
-          message: "Thành công",
-          data: data,
-        })
-      )
+          message: "Đánh giá sản phẩm thành công",
+          data,
+        });
+      })
       .catch((err) => {
         res.status(403).json({
           message: "Lỗi:" + err,

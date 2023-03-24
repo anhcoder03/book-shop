@@ -13,10 +13,11 @@ const Product = new Schema(
     price: { type: Number, require: true },
     image: { type: String, require: true },
     slug: { type: String, slug: "title" },
+    review_count: { type: Number, default: 0 },
+    average_score: { type: Number, default: 0 },
   },
   {
     timestamps: true,
   }
 );
-
 module.exports = mongoose.model("Product", Product);

@@ -36,7 +36,7 @@ function ResultSearch({ data, show = true, nodeRef }) {
         <ResultSearchStyle>
           {data.length > 0 ? (
             data.map((item) => (
-              <div className="product-item" key={item.id}>
+              <div className="product-item" key={item._id}>
                 <div className="product-image">
                   <img src={item.image} alt="" />
                 </div>

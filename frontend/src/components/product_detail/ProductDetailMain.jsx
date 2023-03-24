@@ -3,6 +3,7 @@ import styled from "styled-components";
 import formatPrice from "../../utils/formatPrice";
 import { Button } from "../button";
 import Quantity from "../quantity/Quantity";
+import StarRating from "../rating/StarRating";
 
 const ProductDetailMainStyles = styled.div`
   margin-top: 50px;
@@ -48,7 +49,16 @@ const ProductDetailMainStyles = styled.div`
     gap: 50px;
   }
 `;
-function ProductDetailMain({ title, image, author, year, price }) {
+function ProductDetailMain({
+  reviewCount,
+  averageScore,
+  id,
+  title,
+  image,
+  author,
+  year,
+  price,
+}) {
   return (
     <ProductDetailMainStyles>
       <div className="product-wrapper">
@@ -65,6 +75,10 @@ function ProductDetailMain({ title, image, author, year, price }) {
             <span>Năm xuất bản: </span>
             <span className="product-year">{year}</span>
           </h4>
+          <div className="flex items-center mt-3">
+            {<StarRating rating={averageScore} textSm={true}></StarRating>}
+            <span>({reviewCount} đánh giá)</span>
+          </div>
           <p className="product-info">
             <span>Giá: </span>
             <span className="product-price">
