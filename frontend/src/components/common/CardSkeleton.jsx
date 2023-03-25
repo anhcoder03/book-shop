@@ -4,7 +4,7 @@ import LoadingSkeleton from "./LoadingSkeleton";
 const CardSkeleton = () => {
   return (
     <div className="cursor-pointer">
-      <LoadingSkeleton height="320px" />
+      <LoadingSkeleton height="260px" />
       <div className="mt-2">
         <LoadingSkeleton height="8px" />
         <div className="flex items-center justify-between mt-2 select-none">

@@ -42,5 +42,4 @@ const Literature = ({ data }) => {
     </LiteratureStyles>
   );
 };
-// /product_of_category/:category
 export default GetData(Literature, "/product_of_category/sach-van-hoc");

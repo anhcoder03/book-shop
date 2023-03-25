@@ -27,6 +27,11 @@ const GetData = (Component, url) => {
           <CardSkeleton></CardSkeleton>
           <CardSkeleton></CardSkeleton>
           <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
+          <CardSkeleton></CardSkeleton>
         </div>
       );
     return <Component data={listData} {...props}></Component>;

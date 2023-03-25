@@ -7,7 +7,7 @@ import CardSkeleton from "../common/CardSkeleton";
 import ProductItem from "../common/ProductItem";
 
 const ListProductStyles = styled.div`
-  width: 75%;
+  width: 80%;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   .product-list {
     display: grid;
@@ -15,14 +15,14 @@ const ListProductStyles = styled.div`
   }
 `;
 const CategoryStyles = styled.div`
-  width: 25%;
+  width: 20%;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   .category-list {
     display: flex;
     flex-direction: column;
   }
   .category-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
   }
 `;
@@ -70,21 +70,15 @@ const ListProduct = () => {
   return (
     <ProductContentStyles>
       <CategoryStyles>
-        <h3 className="category-title">Danh mục sản phẩm</h3>
-        {loading && (
-          <div className=" grid grid-cols-2 lg:grid-cols-5 gap-3">
-            <CardSkeleton></CardSkeleton>
-            <CardSkeleton></CardSkeleton>
-            <CardSkeleton></CardSkeleton>
-            <CardSkeleton></CardSkeleton>
-            <CardSkeleton></CardSkeleton>
-          </div>
-        )}
-        <div className="category-list">
+        <h3 className="category-title  bg-primary py-3 px-3 text-white rounded-t-lg">
+          Danh mục sản phẩm
+        </h3>
+        <div className="category-list mt-2">
           {listCategory.length > 0 &&
             listCategory.map((category) => (
               <div key={category._id}>
                 <p
+                  className={`p-3 hover:bg-primary hover:text-white`}
                   onClick={() =>
                     handleGetProductByCategory(
                       category.slug,
@@ -99,9 +93,26 @@ const ListProduct = () => {
         </div>
       </CategoryStyles>
       <ListProductStyles>
-        <h3 className="product-title">{title}</h3>
-        <div className="product-list">
-          {listProduct.length > 0 &&
+        <h1 className=" mt-5 text-center product-title  text-2xl font-bold">
+          {title}
+        </h1>
+        {loading && (
+          <div className=" grid grid-cols-2 lg:grid-cols-5 gap-3 py-5 px-4">
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+            <CardSkeleton></CardSkeleton>
+          </div>
+        )}
+        <div className="product-list py-5 px-4">
+          {!loading &&
+            listProduct.length > 0 &&
             listProduct.map((item, index) => (
               <ProductItem key={index} item={item}></ProductItem>
             ))}
